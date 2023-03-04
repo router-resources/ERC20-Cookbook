@@ -1,8 +1,6 @@
-# `Cross-Chat`
+# `CrossChain ERC20`
 
-> Fully ready ReactJS Dapp for Cross-Chain Messaging using Router Cross-Talk
-
-🚀DEMO: https://cross-chat-47b25.web.app/
+> Seamlessly transfer ERC-20 tokens from one chain to another using Router Cross-Talk
 
 This project is built with [Router CrossTalk](https://dev.routerprotocol.com/crosstalk-library/overview/introduction)
 
@@ -10,7 +8,7 @@ Router Protocol is a solution introduced to address the issues hindering the usa
 
 Please check the [official documentation of Router Protocol](https://www.routerprotocol.com/) 
 
-![cross-chat](https://firebasestorage.googleapis.com/v0/b/cross-chat-47b25.appspot.com/o/image.gif?alt=media&token=51706ade-52ea-4a41-9a73-c5885a039c91)
+![CrossChain ERC-20](gif)
 
 # ⭐️ `Star us`
 
