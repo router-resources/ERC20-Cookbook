@@ -285,7 +285,7 @@ function handleCrossTalkAck(
 ) external view override {}
 ```
 
-## `Full Code:-`
+## `Full Code`:-
 
 ```sh
 // SPDX-License-Identifier: MIT
