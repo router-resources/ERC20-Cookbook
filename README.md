@@ -45,6 +45,16 @@ The Code has been comprehensively explained in this repository. Click [`here`](#
 
 You need to deploy the same contract on the source chain as well as the destination chain and pass in the required parameters to the [`constructer`](#Creating-state-variables-and-the-constructor) while deploying.
 
+🔨 Mint created ERC-20 token on Source Chain
+
+In order to mint the created ERC-20 token on the source , mint function defined in openzeppelin can be used.
+
+🚂 Transfer minted ERC-20 tokens from source chain to destination chain.
+
+To transfer minted ERC-20 tokens from source chain to destination chain, we make use of transferCrosschain function, which burns specified amount of tokens on source chain and mint the same amount on the destination chain. For more info, refer [`Transferring tokens from a source chain to a destination chain`](#Transferring-tokens-from-a-source-chain-to-a-destination-chain)
+
+📖 For exact steps , refer [Step by Step guide for CrossChain ERC-20](https://github.com/router-resources/Workshop-ERC20)
+
 # 🧭 `Table of contents`
 - [🚀 Steps](#-quick-start)
 - [🧭 Table of contents](#-table-of-contents)
