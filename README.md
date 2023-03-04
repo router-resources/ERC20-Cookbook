@@ -1,6 +1,8 @@
-# `CrossChain ERC20`
+# `CrossChain NFT`
 
-> Seamlessly transfer ERC-20 tokens from one chain to another using Router Cross-Talk
+> Effortlessly transfer NFT's from one chain to another. Made using Router Cross-Talk.
+
+🚀DEMO: [Link to be given]
 
 This project is built with [Router CrossTalk](https://dev.routerprotocol.com/crosstalk-library/overview/introduction)
 
@@ -8,7 +10,7 @@ Router Protocol is a solution introduced to address the issues hindering the usa
 
 Please check the [official documentation of Router Protocol](https://www.routerprotocol.com/) 
 
-![CrossChain ERC-20](gif)
+![CrossChain NFT](Demo gif to placed here)
 
 # ⭐️ `Star us`
 
@@ -20,266 +22,262 @@ If you need help or have other some questions - don't hesitate to write in our d
 
 # 🚀 `Quick Start`
 
-📄 Clone or fork `CrossChain ERC-20`:
+📄 Clone or fork `CrossChain NFT`:
 
 ```sh
-git clone https://github.com/router-resources/ERC20-Cookbook.git
+git clone https://github.com/protocol-designer/CrossChain-NFT.git
 ```
-
-🚴‍♂️ Creating  your Dapp:
-
-Browse to [Remix IDE](https://remix.ethereum.org/) and create a new file having ".sol" extension and you can directly start writing your code there
 
 💿 Install all dependencies:
 
-You don't need to install anything while working in Remix. Remix handles it for you by downloading all the dependecies mentioned in the import statements from npm.
+```sh
+cd cross-chat-main
+npm install
+```
 
+🚴‍♂️ Run your App:
 
+```sh
+npm start
+```
 # 🧭 `Table of contents`
 - [🚀 Quick Start](#-quick-start)
 - [🧭 Table of contents](#-table-of-contents)
-- [`Initiating the Contract`](#Initiating-the-Contract)
-- [`Creating state variables and the constructor`](#Creating-state-variables-and-the-constructor)
-- [`Creating a channel/ Sending a message to an address on destination chain`](#Creating-a-channel/Sending-a-message-to-an-address-on-destination-chain)
-- [`Handling a crosschain request`](#Handling-a-crosschain-request)
-- [`Deployments`](#Deployments)
-  
-  
-# `Initiating the Contract`
+- [🏗 Backend](#Solidity, Router Cross-Talk Library)
+  - [`Initiating the Contract`](#Initiating-the-Contract)
+  - [`Creating state variables and the constructor`](#Creating-state-variables-and-the-constructor)
+  - [`Setting up the Destination Contract on the Source Contract`](#Setting-up-the-Destination-Contract-on-the-Source-Contract)
+  - [`Transferring an NFT from a source chain to a destination chain`](#Transferring-an-NFT-from-a-source-chain-to-a-destination-chain)
+  - [`Handling a cross-chain request`](#Handling-a-cross-chain-request)
+  - [`Handling the acknowledgement received from destination chain`](#Handling-the-acknowledgement-received-from-destination-chain)
 
-For initiating the smart contract named "Coin", the contract imports three external contracts 
-#`1)`
-2) .
-3) .
-The "ICrossTalkApplication.sol", "IGateway.sol" contracts are imported from the "evm-gateway-contract/contracts" while "ERC20.sol" is imported from "@openzeppelin/contracts/token/ERC20" 
-The "CrossChat" contract implements the "ICrossTalkApplication" contract by inheriting from it. This means that the "CrossChat" contract must have all the functions and variables defined in the "ICrossTalkApplication" contract.
-By importing and implementing these contracts, the "CrossChat" contract will have access to their functionality and will be compatible with other contracts that follow the same standards.
+
+  
+# 🏗 Frontend
+
+
+# 🏗 Backend
+  
+## `Initiating the Contract`
+
+For initiating the smart contract named "CrossChainNFT", the contract imports four external contracts :-
+
+1. **ICrossTalkApplication.sol**
+
+2. **Utils.sol**
+
+3. **IGateway.sol**
+
+4. **ERC1155.sol**
+
+The "ICrossTalkApplication.sol", "Utils.sol" and "IGateway.sol" contracts are imported from the "evm-gateway-contract/contracts" and "ERC1155.sol" from "openzeppelin/contracts/token".The "CrossChain" contract implements the "ICrossTalkApplication" and "ERC1155.sol" contract by inheriting from them. This means that the "CrossChainNFT" contract must have all the functions and variables defined in the "ICrossTalkApplication" contract. By importing and implementing these contracts, the "CrossChainNFT" contract will have access to their functionality and will be compatible with other contracts that follow the same standards.
 
 ```sh
-// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.17;
+//SPDX-License-Identifier: UNLICENSED
+pragma solidity >=0.8.0 <0.9.0;
+
 import "evm-gateway-contract/contracts/ICrossTalkApplication.sol";
-import "evm-gateway-contract/contracts/IGateway.sol";
-import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "evm-gateway-contract/contracts/Utils.sol";
+import "evm-gateway-contract/contracts/contracts/CrossTalkUtils.sol";
+import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
+
+contract CrossChainNFT is ERC1155, ICrossTalkApplication {
+}
 ```
-# `Initiating the Contract`
+## `Creating State Variables and the Constructor`
 
-Creating State Variables and the Constructor
-In this section of the smart contract code, state variables and events are defined for the contract in the Solidity programming language. The code defines the following:
+The smart contract has the following state variables:
 
-A public state variable "gatewayContract" of type "address" is created to store the address of the gateway contract. This contract will be responsible for routing messages to the Router Chain.
+1. **admin** - an address variable which stores the address of the admin. This will be used for access control purposes.
 
-A public state variable "greeting" of type "string" is created. This variable will store a message that will be set on the destination chain when a "message" is received.
+2. **gatewayContract** - an address variable which holds the address of the gateway contract. This contract will route messages to the Router Chain.
 
-A public state variable "lastEventIdentifier" of type "uint64" is created. This variable will store the nonce for the cross-chain transaction generated by the Gateway contract. This will be used to verify the nonce when the acknowledgment is received from the destination chain.
+3. **destGasLimit** - a uint64 variable which indicates the amount of gas required to execute the function that will handle cross-chain requests on the destination chain.
 
-A public state variable "destGasLimit" of type "uint64" is created. This variable indicates the amount of gas required to execute the function that will handle the cross-chain request on the destination chain. This value can be easily calculated using a gas estimator such as the "hardhat-gas-reporter" plugin.
+4. **ourContractOnChains** - a mapping which maps a chain type and chain ID to the address of NFT contracts deployed on different chains. This mapping will be used to set the address of the destination contract.
 
-A public state variable "ackGasLimit" of type "uint64" is created. This variable indicates the amount of gas required to execute the callback function that will handle the acknowledgment received from the destination chain. This value can be easily calculated using a gas estimator such as the "hardhat-gas-reporter" plugin.
+The smart contract also defines a struct TransferParams which includes the following parameters:
 
-A custom error "CustomError" is created, which can be used to throw custom errors.
+1. **nftIds** - an array of uint256 values which represent the IDs of the NFTs to be transferred.
 
-An event "ExecutionStatus" is created with parameters "uint64 eventIdentifier" and "bool isSuccess". This event will be emitted when the acknowledgment is received and handled by the source chain.
+2. **nftAmounts** -  an array of amounts of the respective NFT Ids to be transferred to the recipient on the destination chain..
 
-An event "ReceivedSrcChainIdAndType" is created with parameters "uint64 chainType" and "string chainID". This event will be emitted when the acknowledgment is received and handled by the source chain.
+3. **nftData** - a bytes variable which holds additional data related to the NFT transfer.You can send 0x00 if you don’t want to send any data while minting the NFT.
 
-A constructor is created with the parameters "address payable gatewayAddress", "uint64 _destGasLimit", and "uint64 _ackGasLimit". The constructor sets the values of the "gatewayContract", "destGasLimit", and "ackGasLimit" state variables using the provided parameters.
+4. **recipient** - a bytes variable which holds the address of the recipient of the NFT transfer.
+
+The constructor of the smart contract takes three parameters:
+
+1. **uri** - a string which represents the URI for the NFTs being created.
+
+2. **gatewayAddress** - an address variable which holds the address of the gateway contract.
+
+3. **_destGasLimit** - a uint64 variable which indicates the amount of gas required to execute the function that will handle cross-chain requests on the destination chain.
+
+The smart contract extends the ERC1155 standard and includes all the required functions such as balanceOf, safeTransferFrom, setApprovalForAll, and others.
 
 ```sh
+address public admin;
 address public gatewayContract;
-string public greeting;
-uint64 public lastEventIdentifier;
 uint64 public destGasLimit;
-uint64 public ackGasLimit;
+// chain type + chain id => address of our contract in bytes
+mapping(uint64 => mapping(string => bytes)) public ourContractOnChains;
 
-error CustomError(string message);
-event ExecutionStatus(uint64 eventIdentifier, bool isSuccess);
-event ReceivedSrcChainIdAndType(uint64 chainType, string chainID);
+struct TransferParams {
+    uint256[] nftIds;
+    uint256[] nftAmounts;
+    bytes nftData;
+    bytes recipient;
+}
 
 constructor(
-	address payable gatewayAddress, 
-	uint64 _destGasLimit, 
-	uint64 _ackGasLimit
-) {
-  gatewayContract = gatewayAddress;
-	destGasLimit = _destGasLimit;
-	ackGasLimit = _ackGasLimit;
+    string memory uri,
+    address payable gatewayAddress, 
+    uint64 _destGasLimit
+) ERC1155(uri) {
+    gatewayContract = gatewayAddress;
+    destGasLimit = _destGasLimit;
+    admin = msg.sender;
 }
 ```
 
-# `Creating a channel/ Sending a message to an address on destination chain`
+## `Setting up the Destination Contract on the Source Contract`
 
-pingDestination Function:-
-The pingDestination function is used to create a channel and send a message to a specified address on a destination chain. It is a public function that is payable.
+**setContractOnChain**:-
 
-Parameters
-The function takes in the following parameters:
+The given code defines a setter function setContractOnChain which allows the admin to set the address of a destination contract on the source chain and visa versa. The function takes three parameters:
 
-chainId (string memory): the id of the destination chain,
-destinationContractAddress (address): the address of the destination contract to which the message will be sent,
-user0 (address): the wallet address of the sender,
-user1 (address): the wallet address of the receiver,
-message (string memory): the message to be sent.
-Functionality
+chainType - a uint64 variable which represents the type of the chain (e.g. Ethereum, Binance Smart Chain, etc.)
+chainId - a string which represents the ID of the chain where the contract is deployed.
+contractAddress - an address variable which holds the address of the NFT contract deployed on the specified chain.
+The function first checks whether the caller is the admin by comparing the msg.sender with the admin address variable. If the caller is not the admin, the function will revert with an error message "only admin".
 
-The pingDestination function Increments the currentRequestId,
-Encodes the currentRequestId, user0, user1, and message into a payload to be sent to the destination chain,
-Sets the expiryTimestamp to be the current block timestamp plus 100000000000,
-Converts the destinationContractAddress into an array of bytes called addresses,
-Assigns the payload to an array of bytes called payloads,
-Calls the _pingDestination function and passes the following parameters:
-expiryTimestamp
-80000000000 as source and destination chain gas limit
-chainId
-payloads
-addresses
+If the caller is the admin, the function will convert the contractAddress to bytes using the toBytes function and store it in the ourContractOnChains mapping using the chainType and chainId as the keys.
 
 ```sh
-Creating a channel/ Sending a message to an address on destination chain
-
-function pingDestination(string memory chainId, address destinationContractAddress, address user0, address user1, string memory message) public payable {
-currentRequestId++;
-bytes memory payload = abi.encode(currentRequestId, user0, user1, message);
-uint64 expiryTimestamp = uint64(block.timestamp) + 100000000000;
-bytes[] memory addresses = new bytes;
-addresses[0] = toBytes(destinationContractAddress);
-bytes[] memory payloads = new bytes;
-payloads[0] = payload;
-_pingDestination(expiryTimestamp, 80000000000, 80000000000, 0, chainId, payloads, addresses);
+function setContractOnChain(
+    uint64 chainType, 
+    string memory chainId, 
+    address contractAddress
+) external {
+    require(msg.sender == admin, "only admin");
+    ourContractOnChains[chainType][chainId] = toBytes(contractAddress);
 }
 ```
+## `Transferring an NFT from a source chain to a destination chain`
 
-_pingDestination function calls the requestToDest function on the Router's Gateway contract to generate a cross-chain request and stores the nonce returned into the lastEventIdentifier. 
+**transferCrossChain:-**
+
+This function allows a user to transfer their NFTs from their account on one chain to their account on a destination chain. The function burns the specified NFTs from the user's account, creates a cross-chain communication request to the destination chain, and passes the transfer parameters as payload in the request.
+
+The function accepts the following parameters:
+
+1. **chainType**: A uint64 representing the type of the destination chain. See the link provided in the description for the list of available chain types.
+
+2. **chainId**: A string representing the ID of the destination chain.
+
+3. **expiryDurationInSeconds**: A uint64 representing the duration in seconds for which the cross-chain request created after calling this function remains valid. If the expiry duration elapses before the request is executed on the destination chain contract, the request will fail.
+
+4. **destGasPrice**: A uint64 representing the gas price of the destination chain.
+
+5. **transferParams**: A struct of type TransferParams which receives the NFT Ids and the respective amounts the user wants to transfer to the destination chain. It also receives the arbitrary data to be used while minting the NFT on the destination chain and the address of recipient in bytes.
+
+The function burns the specified NFTs from the user's account and creates a cross-chain communication request to the destination chain. The payload for the request is generated by ABI encoding the transferParams. The expiry timestamp for the request is calculated as block.timestamp + expiryDurationInSeconds.
+
+The function uses the CrossTalkUtils library to generate the cross-chain communication request to the destination chain. The function also uses the ourContractOnChains mapping to retrieve the address of the NFT contract on the destination chain.
 
 ```sh
-    function _pingDestination(
-        uint64 expiryTimestamp,
-        uint64 destGasPrice,
-        uint64 ackGasPrice,
-        uint64 chainType,
-        string memory chainId,
-        bytes[] memory payloads,
-        bytes[] memory addresses
-    ) internal {
-        gatewayContract.requestToDest(
-            expiryTimestamp,
-            false,
-            Utils.AckType.ACK_ON_SUCCESS,
-            Utils.AckGasParams(ackGasLimit, ackGasPrice),
-            Utils.DestinationChainParams(
-                destGasLimit,
-                destGasPrice,
-                chainType,
-                chainId
-            ),
-            Utils.ContractCalls(payloads, addresses)
-        );
-    }
+function transferCrossChain(
+    uint64 chainType,
+    string memory chainId,
+    uint64 expiryDurationInSeconds,
+    uint64 destGasPrice,
+    TransferParams memory transferParams
+  ) public payable {
+        // burning the NFTs from the address of the user calling this function
+    _burnBatch(msg.sender, transferParams.nftIds, transferParams.nftAmounts);
+
+    bytes memory payload = abi.encode(transferParams);
+    uint64 expiryTimestamp = uint64(block.timestamp) + expiryDurationInSeconds;
+    Utils.DestinationChainParams memory destChainParams = 
+                    Utils.DestinationChainParams(
+                        destGasLimit,
+                        destGasPrice,
+                        chainType,
+                        chainId
+                    );      
+
+    CrossTalkUtils.singleRequestWithoutAcknowledgement(
+        gatewayContract,
+        expiryTimestamp,
+        destChainParams,
+        ourContractOnChains[chainType][chainId],  // destination contract address
+        payload
+    );
+  }
+  ```
+ 
+## `Handling a cross-chain request`
+
+**handleRequestFromSource function:-**
+
+This function is called by the Gateway contract on the destination chain, which is triggered when a cross-chain transfer request is sent by our contract on the source chain. This function receives several parameters, including the source contract address, the payload, the source chain ID, and the source chain type.
+
+1. **srcContractAddress**: A bytes array that represents the address of the contract on the source chain that initiated the cross-chain transfer request.
+
+2. **payload**: A bytes array that contains information about the NFTs that are being transferred, including the recipient's address, NFT IDs, amounts, and additional data.
+
+3. **srcChainId**: A string that represents the ID of the source chain from which the cross-chain transfer request originated.
+
+4. **srcChainType**: An unsigned 64-bit integer that represents the type of the source chain from which the cross-chain transfer request originated.
+
+he function first checks that the call is made only by the Gateway contract and that the request is received from our contract on the source chain. If the conditions are not met, the function will revert the transaction.
+
+The payload that was sent with the cross-chain transfer request contains information about the NFTs that are being transferred, such as the recipient's address, the NFT IDs, the amounts, and any additional data. The function decodes the payload into a TransferParams struct.
+
+After decoding the payload, the function uses the _mintBatch function of the ERC-1155 contract from the OpenZeppelin library to mint the NFTs to the recipient on the destination chain. The function converts the address of the recipient from bytes to an address format using the toAddress function provided in the CrossTalkUtils library.
+
+Finally, the function returns the source chain ID and source chain type in encoded bytes.
+
+```sh
+function handleRequestFromSource(
+  bytes memory srcContractAddress,
+  bytes memory payload,
+  string memory srcChainId,
+  uint64 srcChainType
+) external override returns (bytes memory) {
+  require(msg.sender == address(gatewayContract));
+    require(
+    keccak256(srcContractAddress) == 
+        keccak256(ourContractOnChains[srcChainType][srcChainId])
+    );
+
+  TransferParams memory transferParams = abi.decode(payload, (TransferParams));
+    _mintBatch(
+        CrossTalkUtils.toAddress(transferParams.recipient), 
+        transferParams.nftIds, 
+        transferParams.nftAmounts, 
+        transferParams.nftData
+    );
+
+  return abi.encode(srcChainId, srcChainType);
+}
 ```
-# `Handling a crosschain request`
+## `Handling the acknowledgement received from destination chain`
 
-To handle cross-chain requests on the destination chain we make use of handleRequestFromSource function. This function is automatically called when the destination chain receives the requests, and the user does not need to manually call it. The core logic of the dapp is written in this function to store the message and contacts in two mappings, map and contacts, respectively.
+**handleCrossTalkAck:-**
 
-Mappings:
+The handleCrossTalkAck function is a public function that needs to be implemented in the contract to satisfy the ICrossTalkApplication interface.
+The function takes three parameters: **eventIdentifier**, **execFlags**, and **execData** . However, since we are only implementing an empty function, we do not need to use these parameters.
 
-map: This mapping is used to store the messages between two contacts. The messages are stored in a string array indexed by the two addresses of the contacts who are communicating.
+The handleCrossTalkAck function does not perform any operation on the contract or on the blockchain. It is implemented as an empty function and only serves as a placeholder to satisfy the interface requirements.
 
-contacts: This mapping is used to store the contacts for a particular user. It maps the address of a user to an array of addresses of their contacts.
-
-handleRequestFromSource() Function
-The handleRequestFromSource function is called automatically by the destination chain upon receipt of a cross-chain request. It takes in the following parameters:
-
-srcContractAddress: The address of the source contract.
-payload: The payload of the cross-chain request, which contains the relevant information to be processed by the destination chain.
-srcChainId: The ID of the source chain.
-srcChainType: The type of the source chain.
-The function decodes the payload and retrieves the information, which includes a request ID, two wallet addresses (user0 and user1), and a message. If the message is a special "#NULL#" value, the addresses are added to each other's contacts in the contacts mapping. If the message is not "#NULL#", it is added to the message history in the map mapping between the two addresses.
-
-getMessages() Function
-The getMessages function returns the message history between two addresses. It takes in two parameters:
-
-u0: The first wallet address.
-u1: The second wallet address.
-The function returns the message history stored in the map mapping between the two addresses.
-
-getContacts() Function
-The getContacts function returns the contacts of a given wallet address. It takes in one parameter:
-
-u0: The wallet address.
-The function returns the contacts stored in the contacts mapping for the given wallet address.
+Therefore, the handleCrossTalkAck function should be implemented with an empty body as shown in the code provided.
 
 ```sh
-  mapping(address => mapping(address => string[])) public map;
-    mapping(address => address[]) public contacts;
-
-   function handleRequestFromSource(
-        bytes memory srcContractAddress,
-        bytes memory payload,
-        string memory srcChainId,
-        uint64 srcChainType
-    ) external override returns (bytes memory) {
-        require(msg.sender == address(gatewayContract));
-
-        (
-            uint64 requestId,
-            address user0,
-            address user1,
-            string memory message
-        ) = abi.decode(payload, (uint64, address, address, string));
-
-        if (
-            keccak256(abi.encodePacked(message)) ==
-            keccak256(abi.encodePacked("#NULL#"))
-        ) {
-            contacts[user0].push(user1);
-            contacts[user1].push(user0);
-        } else {
-            map[user0][user1].push(message);
-            map[user1][user0].push(message);
-        }
-
-        return abi.encode(requestId, user0, user1, message);
-    }
-
-    function getMessages(
-        address u0,
-        address u1
-    ) public view returns (string[] memory) {
-        return map[u0][u1];
-    }
-
-    function getContacts(address u0) public view returns (address[] memory) {
-        return contacts[u0];
-    }
- ```
- 
- # `Deployments`
- 
-To implement cross-chain communication, we need to deploy the same contract on all chains that we want to have communication with. The first step is to open https://remix.ethereum.org/ and compile the code. After that, we need to deploy the contract on the desired chains and pass in the Gateway address, destination gas limit, and source gas limit as parameters. The Gateway address can be found on the Router Protocol's Supported Chains documentation page at https://devnet-docs.routerprotocol.com/networks/supported-chains.
-
-To determine the gas limits, we can use a gas estimator. One option is to use the hardhat-gas-reporter plugin. Alternatively, we can view recent transactions on the desired chain through its explorer to determine the gas limit.
-
-# `Back to Frontend`
-
-To allow for cross-chain communication, the contract must be deployed on multiple chains. After deployment, copy the ABI of the contract, the addresses of the deployed contracts, and the chain IDs. Pass this information to the runContractFunction function as follows:
-
-```sh
-const options = {
-    abi: <insert ABI here>,
-    contractAddress: <insert source contract address here>,
-    functionName: "pingDestination",
-    params: {
-      chainId: <insert destination chain ID here>,
-      destinationContractAddress: <insert destination contract address here>,
-      user0: account,
-      user1: channelReceiptAddress,
-      message: "#NULL#",
-    },
-};
-
-const result = await runContractFunction({ params: options });
-
+function handleCrossTalkAck(
+  uint64, //eventIdentifier,
+  bool[] memory, //execFlags,
+  bytes[] memory //execData
+) external view override {}
 ```
- 
- 
-
