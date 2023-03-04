@@ -42,7 +42,7 @@ You don't need to install any dependencies. Remix automatically downloads all th
 - [`Initiating the Contract`](#Initiating-the-Contract)
 - [`Creating state variables and the constructor`](#Creating-state-variables-and-the-constructor)
 - [`Setting up the Destination Contract on the Source Contract`](#Setting-up-the-Destination-Contract-on-the-Source-Contract)
-- [`Transferring an NFT from a source chain to a destination chain`](#Transferring-an-NFT-from-a-source-chain-to-a-destination-chain)
+- [`Transferring tokens from a source chain to a destination chain`](#Transferring-tokens-from-a-source-chain-to-a-destination-chain)
 - [`Handling a cross-chain request`](#Handling-a-cross-chain-request)
 - [`Handling the acknowledgement received from destination chain`](#Handling-the-acknowledgement-received-from-destination-chain)
 
@@ -155,33 +155,39 @@ The function uses the CrossTalkUtils library to generate the cross-chain communi
 
 ```sh
 function transferCrossChain(
-    uint64 chainType,
-    string memory chainId,
-    uint64 expiryDurationInSeconds,
-    uint64 destGasPrice,
-    TransferParams memory transferParams
-  ) public payable {
-        // burning the NFTs from the address of the user calling this function
-    _burnBatch(msg.sender, transferParams.nftIds, transferParams.nftAmounts);
+        uint64 _dstChainType,
+        string memory _dstChainId, // it can be uint, why it is string?
+        uint64 destGasPrice,
+        address recipient,
+        uint256 amount
+    ) public {
+        bytes memory payload = abi.encode(amount, recipient);
 
-    bytes memory payload = abi.encode(transferParams);
-    uint64 expiryTimestamp = uint64(block.timestamp) + expiryDurationInSeconds;
-    Utils.DestinationChainParams memory destChainParams = 
-                    Utils.DestinationChainParams(
-                        destGasLimit,
-                        destGasPrice,
-                        chainType,
-                        chainId
-                    );      
+        // burn token on src chain from msg.msg.sender
+        _burn(msg.sender, amount);
 
-    CrossTalkUtils.singleRequestWithoutAcknowledgement(
-        gatewayContract,
-        expiryTimestamp,
-        destChainParams,
-        ourContractOnChains[chainType][chainId],  // destination contract address
-        payload
-    );
-  }
+      
+
+        bytes[] memory addresses = new bytes[](1);
+        addresses[0] = ourContractOnChains[_dstChainType][_dstChainId];
+        bytes[] memory payloads = new bytes[](1);
+        payloads[0] = payload;
+
+        IGateway(gatewayContract).requestToDest(
+            Utils.RequestArgs(1000000000000000, false, Utils.FeePayer.APP),
+            Utils.AckType(Utils.AckType.NO_ACK),
+            Utils.AckGasParams(destGasLimit, destGasPrice),
+            Utils.DestinationChainParams(
+                destGasLimit,
+                destGasPrice,
+                _dstChainType,
+                _dstChainId
+            ),
+            Utils.ContractCalls(payloads, addresses)
+        );
+
+       
+    }
   ```
  
 ## `Handling a cross-chain request`
