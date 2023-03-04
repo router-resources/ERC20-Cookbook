@@ -49,11 +49,21 @@ You need to deploy the same contract on the source chain as well as the destinat
 
 In order to mint the created ERC-20 token on the source , mint function defined in openzeppelin can be used.
 
+🤝 Set destination contract to source contract and source contract to destination contract
+
+To set destination contract to source contract and source contract to destination contract, we make use of setContractOnChain function. For more info, go to [`Setting up the Destination Contract on the Source Contract`](#Setting-up-the-Destination-Contract-on-the-Source-Contract)
+
+💵 Send Route tokens to the source contract
+
+To send Route tokens to the source contract, copy the source contract address, visit https://devnet-faucet.routerprotocol.com/ , paste the address there and click on Get Route
+
 🚂 Transfer minted ERC-20 tokens from source chain to destination chain.
 
-To transfer minted ERC-20 tokens from source chain to destination chain, we make use of transferCrosschain function, which burns specified amount of tokens on source chain and mint the same amount on the destination chain. For more info, refer [`Transferring tokens from a source chain to a destination chain`](#Transferring-tokens-from-a-source-chain-to-a-destination-chain)
+To transfer minted ERC-20 tokens from source chain to destination chain, we make use of transferCrosschain function, which burns specified amount of tokens on source chain and mint the same amount on the destination chain. For more info, go to [`Transferring tokens from a source chain to a destination chain`](#Transferring-tokens-from-a-source-chain-to-a-destination-chain)
 
-📖 For exact steps , refer [Step by Step guide for CrossChain ERC-20](https://github.com/router-resources/Workshop-ERC20)
+🔍 Browse to [Router Devnet Explorer](https://devnet-explorer.routerprotocol.com/crosstalks) to see the transactions made. Wait for sometime till you see 4 green checks in your transaction column.This indicates, the tokens have been successfully transferred to the destination chain
+
+📖 For more detailed steps , refer [Step by Step guide for CrossChain ERC-20](https://github.com/router-resources/Workshop-ERC20)
 
 # 🧭 `Table of contents`
 - [🚀 Steps](#-quick-start)
