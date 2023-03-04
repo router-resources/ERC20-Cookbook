@@ -20,10 +20,10 @@ If you need help or have other some questions - don't hesitate to write in our d
 
 # 🚀 `Quick Start`
 
-📄 Clone or fork `cross-chat`:
+📄 Clone or fork `CrossChain ERC-20`:
 
 ```sh
-git clone https://github.com/protocol-designer/cross-chat.git
+git clone https://github.com/router-resources/ERC20-Cookbook.git
 ```
 
 💿 Install all dependencies:
