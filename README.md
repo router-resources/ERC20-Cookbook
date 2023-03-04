@@ -80,37 +80,25 @@ The smart contract has the following state variables:
 
 2. **gatewayContract** - an address variable which holds the address of the gateway contract. Gateway contracts are contracts which are pre-deployed on supported blockchains for cross-chain communication.The source chain's gateway contract communicates with the destination chain's gateway contract, enabling communication between application contracts deployed on different chains. Find GatewayContract Addresses [here](https://devnet.lcd.routerprotocol.com/router-protocol/router-chain/multichain/chain_config)
 
-
 3. **destGasLimit** - a uint64 variable which indicates the amount of gas required to execute the function that will handle cross-chain requests on the destination chain.
 
-4. **ourContractOnChains** - a mapping which maps a chain type and chain ID to the address of NFT contracts deployed on different chains. This mapping will be used to set the address of the destination contract.
+4. **ourContractOnChains** - a mapping which maps a chain type and chain ID to the address of CrossChainERC20 contract deployed on different chains. This mapping will be used to set the address of the destination contract to the source contract and visa versa
 
 
-The smart contract extends the ERC1155 standard and includes all the required functions such as balanceOf, safeTransferFrom, setApprovalForAll, and others.
+The smart contract extends the ERC20 standard and includes all the required functions and variables such as balanceOf, totalSupply, mint, burn and others.
 
 ```sh
-address public admin;
-address public gatewayContract;
-uint64 public destGasLimit;
-// chain type + chain id => address of our contract in bytes
-mapping(uint64 => mapping(string => bytes)) public ourContractOnChains;
-
-struct TransferParams {
-    uint256[] nftIds;
-    uint256[] nftAmounts;
-    bytes nftData;
-    bytes recipient;
-}
-
-constructor(
-    string memory uri,
-    address payable gatewayAddress, 
-    uint64 _destGasLimit
-) ERC1155(uri) {
-    gatewayContract = gatewayAddress;
-    destGasLimit = _destGasLimit;
-    admin = msg.sender;
-}
+ address owner;
+ address public gatewayContract;
+ uint64 public destGasLimit;
+ mapping(uint64 => mapping(string => bytes)) public ourContractOnChains;
+ constructor( address payable gatewayAddress,
+        uint64 _destGasLimit ) ERC20("Token","RTK")
+        {
+            gatewayContract=gatewayAddress;
+            destGasLimit=_destGasLimit;
+            owner=msg.sender;
+        }
 ```
 
 ## `Setting up the Destination Contract on the Source Contract`
