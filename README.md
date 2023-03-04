@@ -28,7 +28,7 @@ If you need help or have other some questions - don't hesitate to write in our d
 git clone https://github.com/router-resources/ERC20-Cookbook.git
 ```
 
-🚴‍♂️ Create your Token:
+✍️ Setting up your editor:
 
 Browse to [Remix IDE](https://remix.ethereum.org/) and create a new file with ".sol" extension.
 
@@ -55,55 +55,36 @@ For initiating the smart contract named "CrossChainNFT", the contract imports fo
 
 1. **ICrossTalkApplication.sol**
 
-2. **Utils.sol**
+2. **IGateway.sol**
 
-3. **IGateway.sol**
+3. **ERC20.sol**
 
-4. **ERC1155.sol**
-
-The "ICrossTalkApplication.sol", "Utils.sol" and "IGateway.sol" contracts are imported from the "evm-gateway-contract/contracts" and "ERC1155.sol" from "openzeppelin/contracts/token".The "CrossChain" contract implements the "ICrossTalkApplication" and "ERC1155.sol" contract by inheriting from them. This means that the "CrossChainNFT" contract must have all the functions and variables defined in the "ICrossTalkApplication" contract. By importing and implementing these contracts, the "CrossChainNFT" contract will have access to their functionality and will be compatible with other contracts that follow the same standards.
+The "ICrossTalkApplication.sol" and "IGateway.sol" contracts are imported from the "evm-gateway-contract/contracts" and "ERC20.sol" from "openzeppelin/contracts/token".The "CrossChain" contract implements the "ICrossTalkApplication" and "ERC20.sol" contract by inheriting from them. This means that the "CrossChainERC20" contract must have all the functions and variables defined in the "ICrossTalkApplication" contract. By importing and implementing these contracts, the "CrossChainERC20" contract will have access to their functionality and will be compatible with other contracts that follow the same standards.
 
 ```sh
 //SPDX-License-Identifier: UNLICENSED
 pragma solidity >=0.8.0 <0.9.0;
 
 import "evm-gateway-contract/contracts/ICrossTalkApplication.sol";
-import "evm-gateway-contract/contracts/Utils.sol";
-import "evm-gateway-contract/contracts/contracts/CrossTalkUtils.sol";
-import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
+import "evm-gateway-contract/contracts/IGateway.sol";
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
-contract CrossChainNFT is ERC1155, ICrossTalkApplication {
+contract CrossChainERC20 is ERC20, ICrossTalkApplication {
 }
 ```
 ## `Creating State Variables and the Constructor`
 
 The smart contract has the following state variables:
 
-1. **admin** - an address variable which stores the address of the admin. This will be used for access control purposes.
+1. **onwer** - an address variable which stores the address from which the contract has been deployed.
 
-2. **gatewayContract** - an address variable which holds the address of the gateway contract. This contract will route messages to the Router Chain.
+2. **gatewayContract** - an address variable which holds the address of the gateway contract. Gateway contracts are contracts which are pre-deployed on supported blockchains for cross-chain communication.The source chain's gateway contract communicates with the destination chain's gateway contract, enabling communication between application contracts deployed on different chains. Find GatewayContract Addresses [here](https://devnet.lcd.routerprotocol.com/router-protocol/router-chain/multichain/chain_config)
+
 
 3. **destGasLimit** - a uint64 variable which indicates the amount of gas required to execute the function that will handle cross-chain requests on the destination chain.
 
 4. **ourContractOnChains** - a mapping which maps a chain type and chain ID to the address of NFT contracts deployed on different chains. This mapping will be used to set the address of the destination contract.
 
-The smart contract also defines a struct TransferParams which includes the following parameters:
-
-1. **nftIds** - an array of uint256 values which represent the IDs of the NFTs to be transferred.
-
-2. **nftAmounts** -  an array of amounts of the respective NFT Ids to be transferred to the recipient on the destination chain..
-
-3. **nftData** - a bytes variable which holds additional data related to the NFT transfer.You can send 0x00 if you don’t want to send any data while minting the NFT.
-
-4. **recipient** - a bytes variable which holds the address of the recipient of the NFT transfer.
-
-The constructor of the smart contract takes three parameters:
-
-1. **uri** - a string which represents the URI for the NFTs being created.
-
-2. **gatewayAddress** - an address variable which holds the address of the gateway contract.
-
-3. **_destGasLimit** - a uint64 variable which indicates the amount of gas required to execute the function that will handle cross-chain requests on the destination chain.
 
 The smart contract extends the ERC1155 standard and includes all the required functions such as balanceOf, safeTransferFrom, setApprovalForAll, and others.
 
