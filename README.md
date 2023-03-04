@@ -47,18 +47,20 @@ You don't need to install anything while working in Remix. Remix handles it for 
   
 # `Initiating the Contract`
 
-For initiating the smart contract named "CrossChat", the contract imports three external contracts
-The "ICrossTalkApplication.sol", "Utils.sol" and "IGateway.sol" contracts are imported from the "evm-gateway-contract/contracts" 
+For initiating the smart contract named "Coin", the contract imports three external contracts 
+#`1)`
+2) .
+3) .
+The "ICrossTalkApplication.sol", "IGateway.sol" contracts are imported from the "evm-gateway-contract/contracts" while "ERC20.sol" is imported from "@openzeppelin/contracts/token/ERC20" 
 The "CrossChat" contract implements the "ICrossTalkApplication" contract by inheriting from it. This means that the "CrossChat" contract must have all the functions and variables defined in the "ICrossTalkApplication" contract.
 By importing and implementing these contracts, the "CrossChat" contract will have access to their functionality and will be compatible with other contracts that follow the same standards.
 
 ```sh
-//SPDX-License-Identifier: UNLICENSED
-pragma solidity >=0.8.0 <0.9.0;
-
-import "evm-gateway-contract/contracts/IGateway.sol";
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.17;
 import "evm-gateway-contract/contracts/ICrossTalkApplication.sol";
-import "evm-gateway-contract/contracts/Utils.sol";
+import "evm-gateway-contract/contracts/IGateway.sol";
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 ```
 # `Initiating the Contract`
 
