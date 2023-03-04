@@ -188,9 +188,6 @@ function transferCrossChain(
 
         // burn token on src chain from msg.msg.sender
         _burn(msg.sender, amount);
-
-      
-
         bytes[] memory addresses = new bytes[](1);
         addresses[0] = ourContractOnChains[_dstChainType][_dstChainId];
         bytes[] memory payloads = new bytes[](1);
@@ -221,7 +218,7 @@ This function is called by the Gateway contract on the destination chain, which 
 
 1. **srcContractAddress**: A bytes array that represents the address of the contract on the source chain that initiated the cross-chain transfer request.
 
-2. **payload**: A bytes array that contains information about the NFTs that are being transferred, including the recipient's address, NFT IDs, amounts, and additional data.
+2. **payload**: A bytes array that containing the payload we sent from the source chain.
 
 3. **srcChainId**: A string that represents the ID of the source chain from which the cross-chain transfer request originated.
 
@@ -229,35 +226,36 @@ This function is called by the Gateway contract on the destination chain, which 
 
 he function first checks that the call is made only by the Gateway contract and that the request is received from our contract on the source chain. If the conditions are not met, the function will revert the transaction.
 
-The payload that was sent with the cross-chain transfer request contains information about the NFTs that are being transferred, such as the recipient's address, the NFT IDs, the amounts, and any additional data. The function decodes the payload into a TransferParams struct.
+The payload that was sent with the cross-chain transfer request contains recipient's address, the amount of tokens to be minted on the destination chain. The function decodes the payload using abi.decode() function.
 
-After decoding the payload, the function uses the _mintBatch function of the ERC-1155 contract from the OpenZeppelin library to mint the NFTs to the recipient on the destination chain. The function converts the address of the recipient from bytes to an address format using the toAddress function provided in the CrossTalkUtils library.
+After decoding the payload, the function uses the _mint function of the ERC-20 contract from the OpenZeppelin library to mint the ERC-20 tokens to the recipient's address on the destination chain. 
 
-Finally, the function returns the source chain ID and source chain type in encoded bytes.
+Finally, the function returns an empty string. Note : We have to return atleast an empty string as per the function definition.
 
 ```sh
 function handleRequestFromSource(
-  bytes memory srcContractAddress,
-  bytes memory payload,
-  string memory srcChainId,
-  uint64 srcChainType
-) external override returns (bytes memory) {
-  require(msg.sender == address(gatewayContract));
-    require(
-    keccak256(srcContractAddress) == 
-        keccak256(ourContractOnChains[srcChainType][srcChainId])
-    );
+        bytes memory srcContractAddress,
+        bytes memory payload,
+        string memory srcChainId,
+        uint64 srcChainType
+    ) external returns (bytes memory) {
 
-  TransferParams memory transferParams = abi.decode(payload, (TransferParams));
-    _mintBatch(
-        CrossTalkUtils.toAddress(transferParams.recipient), 
-        transferParams.nftIds, 
-        transferParams.nftAmounts, 
-        transferParams.nftData
-    );
+        
+        require(
+            keccak256(srcContractAddress) ==
+                keccak256(ourContractOnChains[srcChainType][srcChainId]),
+            "Invalid src chain"
+        );
+        (uint256 amount, address recipient) = abi.decode(
+            payload,
+            (uint256, address)
+        );
 
-  return abi.encode(srcChainId, srcChainType);
-}
+        _mint(recipient, amount);
+
+        
+        return "";
+    }
 ```
 ## `Handling the acknowledgement received from destination chain`
 
