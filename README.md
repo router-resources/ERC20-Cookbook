@@ -22,7 +22,7 @@ If you need help or have other some questions - don't hesitate to write in our d
 
 # 🚀 `Quick Start`
 
-📄 Clone or fork `CrossChain NFT`:
+📄 Clone or fork `CrossChainERC20`:
 
 ```sh
 git clone https://github.com/router-resources/ERC20-Cookbook.git
@@ -51,7 +51,7 @@ You don't need to install any dependencies. Remix automatically downloads all th
   
 ## `Initiating the Contract`
 
-For initiating the smart contract named "CrossChainNFT", the contract imports four external contracts :-
+For initiating the smart contract named "CrossChainERC20", the contract imports four external contracts :-
 
 1. **ICrossTalkApplication.sol**
 
