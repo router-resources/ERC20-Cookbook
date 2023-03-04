@@ -28,15 +28,11 @@ git clone https://github.com/router-resources/ERC20-Cookbook.git
 
 🚴‍♂️ Creating  your Dapp:
 
-```sh
 Browse to [Remix IDE](https://remix.ethereum.org/) and create a new file having ".sol" extension and you can directly start writing your code there
-```
 
 💿 Install all dependencies:
 
-```sh
 You don't need to install anything while working in Remix. Remix handles it for you by fetching all downloading all the dependecies mentioned in the import statements from npm.
-```
 
 
 # 🧭 `Table of contents`
