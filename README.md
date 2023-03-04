@@ -38,21 +38,12 @@ You don't need to install anything while working in Remix. Remix handles it for 
 # 🧭 `Table of contents`
 - [🚀 Quick Start](#-quick-start)
 - [🧭 Table of contents](#-table-of-contents)
-- [🏗 Frontend](#React JS, Moralis)
-  - [`Provider`](#Provider)
-  - [`Basic imports & setup`](#Basic-imports-&-setup)
-  - [`Authentication`](#Authentication)
-  - [`handleCreate`](#handleCreate)
-  - [`addMessage`](#addMessage)
-  - [`getContacts`](#getContacts)
-  - [`getMessage`](#getMessage)
-- [🏗 Backend](#Solidity, Router Cross-Talk Library)
-  - [`Initiating the Contract`](#Initiating-the-Contract)
-  - [`Creating state variables and the constructor`](#Creating-state-variables-and-the-constructor)
-  - [`Creating a channel/ Sending a message to an address on destination chain`](#Creating-a-channel/Sending-a-message-to-an-address-on-destination-chain)
-  - [`Handling a crosschain request`](#Handling-a-crosschain-request)
-  - [`Deployments`](#Deployments)
-  - [`Back to Frontend`](#Back-to-Frontend)
+- [`Initiating the Contract`](#Initiating-the-Contract)
+- [`Creating state variables and the constructor`](#Creating-state-variables-and-the-constructor)
+- [`Creating a channel/ Sending a message to an address on destination chain`](#Creating-a-channel/Sending-a-message-to-an-address-on-destination-chain)
+- [`Handling a crosschain request`](#Handling-a-crosschain-request)
+- [`Deployments`](#Deployments)
+  
   
 # 🏗 Frontend
 
