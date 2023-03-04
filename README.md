@@ -1,6 +1,6 @@
-# `CrossChain NFT`
+# `CrossChain ERC-20`
 
-> Effortlessly transfer NFT's from one chain to another. Made using Router Cross-Talk.
+> Effortlessly transfer ERC-20 tokens from one chain to another. Made using Router Cross-Talk.
 
 🚀DEMO: [Link to be given]
 
@@ -10,7 +10,7 @@ Router Protocol is a solution introduced to address the issues hindering the usa
 
 Please check the [official documentation of Router Protocol](https://www.routerprotocol.com/) 
 
-![CrossChain NFT](Demo gif to placed here)
+![CrossChain ERC-20](Demo gif to placed here)
 
 # ⭐️ `Star us`
 
@@ -25,35 +25,26 @@ If you need help or have other some questions - don't hesitate to write in our d
 📄 Clone or fork `CrossChain NFT`:
 
 ```sh
-git clone https://github.com/protocol-designer/CrossChain-NFT.git
+git clone https://github.com/router-resources/ERC20-Cookbook.git
 ```
+
+🚴‍♂️ Create your Token:
+
+Browse to [Remix IDE](https://remix.ethereum.org/) and create a new file with ".sol" extension.
 
 💿 Install all dependencies:
 
-```sh
-cd cross-chat-main
-npm install
-```
+You don't need to install any dependencies. Remix automatically downloads all the dependencies for you during the time of compile.
 
-🚴‍♂️ Run your App:
-
-```sh
-npm start
-```
 # 🧭 `Table of contents`
 - [🚀 Quick Start](#-quick-start)
 - [🧭 Table of contents](#-table-of-contents)
-- [🏗 Backend](#Solidity, Router Cross-Talk Library)
-  - [`Initiating the Contract`](#Initiating-the-Contract)
-  - [`Creating state variables and the constructor`](#Creating-state-variables-and-the-constructor)
-  - [`Setting up the Destination Contract on the Source Contract`](#Setting-up-the-Destination-Contract-on-the-Source-Contract)
-  - [`Transferring an NFT from a source chain to a destination chain`](#Transferring-an-NFT-from-a-source-chain-to-a-destination-chain)
-  - [`Handling a cross-chain request`](#Handling-a-cross-chain-request)
-  - [`Handling the acknowledgement received from destination chain`](#Handling-the-acknowledgement-received-from-destination-chain)
-
-
-  
-# 🏗 Frontend
+- [`Initiating the Contract`](#Initiating-the-Contract)
+- [`Creating state variables and the constructor`](#Creating-state-variables-and-the-constructor)
+- [`Setting up the Destination Contract on the Source Contract`](#Setting-up-the-Destination-Contract-on-the-Source-Contract)
+- [`Transferring an NFT from a source chain to a destination chain`](#Transferring-an-NFT-from-a-source-chain-to-a-destination-chain)
+- [`Handling a cross-chain request`](#Handling-a-cross-chain-request)
+- [`Handling the acknowledgement received from destination chain`](#Handling-the-acknowledgement-received-from-destination-chain)
 
 
 # 🏗 Backend
