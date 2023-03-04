@@ -59,7 +59,7 @@ For initiating the smart contract named "CrossChainERC20", the contract imports 
 
 3. **ERC20.sol**
 
-The "ICrossTalkApplication.sol" and "IGateway.sol" contracts are imported from the "evm-gateway-contract/contracts" and "ERC20.sol" from "openzeppelin/contracts/token".The "CrossChain" contract implements the "ICrossTalkApplication" and "ERC20.sol" contract by inheriting from them. This means that the "CrossChainERC20" contract must have all the functions and variables defined in the "ICrossTalkApplication" contract. By importing and implementing these contracts, the "CrossChainERC20" contract will have access to their functionality and will be compatible with other contracts that follow the same standards.
+The "ICrossTalkApplication.sol" and "IGateway.sol" contracts are imported from the "evm-gateway-contract/contracts" and "ERC20.sol" from "openzeppelin/contracts/token".The "CrossChainERC20" contract implements the "ICrossTalkApplication" and "ERC20.sol" contract by inheriting from them. This means that the "CrossChainERC20" contract must have all the functions and variables defined in the "ICrossTalkApplication" contract. By importing and implementing these contracts, the "CrossChainERC20" contract will have access to their functionality and will be compatible with other contracts that follow the same standards.
 
 ```sh
 //SPDX-License-Identifier: UNLICENSED
@@ -84,6 +84,13 @@ The smart contract has the following state variables:
 
 4. **ourContractOnChains** - a mapping which maps a chain type and chain ID to the address of CrossChainERC20 contract deployed on different chains. This mapping will be used to set the address of the destination contract to the source contract and visa versa
 
+The constructor of the smart contract takes three parameters:
+
+1. **gatewayAddress** - an address variable which holds the address of the gateway contract.
+
+2. **_destGasLimit** - a uint64 variable which indicates the amount of gas required to execute the function that will handle cross-chain requests on the destination chain.
+
+Inside ERC20 contract contructor, pass the name of yout token followed by its symbol.
 
 The smart contract extends the ERC20 standard and includes all the required functions and variables such as balanceOf, totalSupply, mint, burn and others.
 
