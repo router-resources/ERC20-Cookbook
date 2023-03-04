@@ -20,13 +20,14 @@ If this repository helps you build cross-chain dapps faster and easier - please 
 
 If you need help or have other some questions - don't hesitate to write in our discord channel and we will check asap. [Discord link](https://discord.gg/xvx2pFu9). The best thing about this is the super active community ready to help at any time! We help each other.
 
-# 🚀 `Quick Start`
-
-📄 Clone or fork `CrossChainERC20`:
+# 🤝 `Clone or fork this repository`
 
 ```sh
 git clone https://github.com/router-resources/ERC20-Cookbook.git
 ```
+
+# 🎯 `Steps`
+
 
 ✍️ Setting up your editor:
 
@@ -36,8 +37,17 @@ Browse to [Remix IDE](https://remix.ethereum.org/) and create a new file with ".
 
 You don't need to install any dependencies. Remix automatically downloads all the dependencies for you during the time of compile.
 
+🧑‍💻 Create your CrossChain ERC-20 token Contract:
+
+To create the contract for your CrossChain ERC-20 token , copy-paste the [`Code`](#Full-Code) in the Remix Work Area and compile it.
+The Code has been comprehensively explained in this repository. Click [`here`](#Initiating-the-Contract) for the explanation.
+
+🚀 Deploying the Contract:
+
+You need to deploy the same contract on the source chain as well as the destination chain and pass in the required parameters to the [`constructer`](#Creating-state-variables-and-the-constructor) while deploying.
+
 # 🧭 `Table of contents`
-- [🚀 Quick Start](#-quick-start)
+- [🚀 Steps](#-quick-start)
 - [🧭 Table of contents](#-table-of-contents)
 - [`Initiating the Contract`](#Initiating-the-Contract)
 - [`Creating state variables and the constructor`](#Creating-state-variables-and-the-constructor)
@@ -45,9 +55,9 @@ You don't need to install any dependencies. Remix automatically downloads all th
 - [`Transferring tokens from a source chain to a destination chain`](#Transferring-tokens-from-a-source-chain-to-a-destination-chain)
 - [`Handling a cross-chain request`](#Handling-a-cross-chain-request)
 - [`Handling the acknowledgement received from destination chain`](#Handling-the-acknowledgement-received-from-destination-chain)
+- [`Full Code`](#Full-Code)
 
 
-# 🏗 Backend
   
 ## `Initiating the Contract`
 
