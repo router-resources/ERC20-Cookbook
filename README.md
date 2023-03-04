@@ -8,10 +8,7 @@ Router Protocol is a solution introduced to address the issues hindering the usa
 
 Please check the [official documentation of Router Protocol](https://www.routerprotocol.com/) 
 
-![cross-chat](https://firebasestorage.googleapis.com/v0/b/cross-chat-47b25.appspot.com/o/image.gif?alt=media&token=51706ade-52ea-4a41-9a73-c5885a039c91)
-
-
-![cross-chat](https://firebasestorage.googleapis.com/v0/b/erc20-ed35c.appspot.com/o/VN20230304_214950.gif?alt=media&token=d8c150c2-02eb-4599-8ce1-1a3766653afc)
+![CrossChain ERC-20](https://firebasestorage.googleapis.com/v0/b/erc20-ed35c.appspot.com/o/VN20230304_214950.gif?alt=media&token=d8c150c2-02eb-4599-8ce1-1a3766653afc)
 
 
 # ⭐️ `Star us`
