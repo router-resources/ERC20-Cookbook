@@ -112,14 +112,14 @@ The smart contract extends the ERC20 standard and includes all the required func
 
 **setContractOnChain**:-
 
-The given code defines a setter function setContractOnChain which allows the admin to set the address of a destination contract on the source chain and visa versa. The function takes three parameters:
+The given code defines a setter function setContractOnChain which allows the owner to set the address of a destination contract on the source chain and visa versa. The function takes three parameters:
 
 chainType - a uint64 variable which represents the type of the chain (e.g. Ethereum, Binance Smart Chain, etc.)
 chainId - a string which represents the ID of the chain where the contract is deployed.
-contractAddress - an address variable which holds the address of the NFT contract deployed on the specified chain.
-The function first checks whether the caller is the admin by comparing the msg.sender with the admin address variable. If the caller is not the admin, the function will revert with an error message "only admin".
+contractAddress - an address variable which holds the address of the CrossChainERC20 contract deployed on the other chain we want to send the tokens to.
+The function first checks whether the caller is the owner by comparing the msg.sender with the admin address variable. If the caller is not the owner, the function will revert with an error message "only owner".
 
-If the caller is the admin, the function will convert the contractAddress to bytes using the toBytes function and store it in the ourContractOnChains mapping using the chainType and chainId as the keys.
+If the caller is the owner, the function will convert the contractAddress to bytes using the toBytes function and store it in the ourContractOnChains mapping using the chainType and chainId as the keys.
 
 ```sh
 function setContractOnChain(
@@ -127,7 +127,7 @@ function setContractOnChain(
     string memory chainId, 
     address contractAddress
 ) external {
-    require(msg.sender == admin, "only admin");
+    require(msg.sender == onwer, "only owner");
     ourContractOnChains[chainType][chainId] = toBytes(contractAddress);
 }
 ```
