@@ -29,14 +29,13 @@ git clone https://github.com/router-resources/ERC20-Cookbook.git
 💿 Install all dependencies:
 
 ```sh
-cd cross-chat-main
-npm install
+You don't need to install anything while working in Remix. Remix handles it for you by fetching all downloading all the dependecies mentioned in the import statements from npm.
 ```
 
-🚴‍♂️ Run your App:
+🚴‍♂️ Creating  your Dapp:
 
 ```sh
-npm start
+Browse to [Remix IDE](https://remix.ethereum.org/) and create a new file having ".sol" extension and you can directly start writing your code there
 ```
 # 🧭 `Table of contents`
 - [🚀 Quick Start](#-quick-start)
