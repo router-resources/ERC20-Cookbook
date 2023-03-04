@@ -32,7 +32,7 @@ Browse to [Remix IDE](https://remix.ethereum.org/) and create a new file having 
 
 💿 Install all dependencies:
 
-You don't need to install anything while working in Remix. Remix handles it for you by fetching all downloading all the dependecies mentioned in the import statements from npm.
+You don't need to install anything while working in Remix. Remix handles it for you by downloading all the dependecies mentioned in the import statements from npm.
 
 
 # 🧭 `Table of contents`
