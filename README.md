@@ -2,15 +2,13 @@
 
 > Effortlessly transfer ERC-20 tokens from one chain to another. Made using Router Cross-Talk.
 
-🚀DEMO: ["https://firebasestorage.googleapis.com/v0/b/erc20-ed35c.appspot.com/o/VN20230304_214950.gif?alt=media&token=d8c150c2-02eb-4599-8ce1-1a3766653afc"]
-
 This project is built with [Router CrossTalk](https://dev.routerprotocol.com/crosstalk-library/overview/introduction)
 
 Router Protocol is a solution introduced to address the issues hindering the usability of cross-chain liquidity migration in the DeFi ecosystem. It acts as a bridge connecting various layer 1 and layer 2 blockchains, allowing for the flow of contract-level data across them. The Router Protocol can either transfer tokens between chains or initiate operations on one chain and execute them on another.
 
 Please check the [official documentation of Router Protocol](https://www.routerprotocol.com/) 
 
-![CrossChain ERC-20](Demo gif to placed here)
+![CrossChain ERC-20](https://firebasestorage.googleapis.com/v0/b/erc20-ed35c.appspot.com/o/VN20230304_214950.gif?alt=media&token=d8c150c2-02eb-4599-8ce1-1a3766653afc)
 
 # ⭐️ `Star us`
 
