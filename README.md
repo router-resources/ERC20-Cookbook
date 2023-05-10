@@ -53,15 +53,15 @@ In order to mint the created ERC-20 token on the source , mint function defined 
 
 To set destination contract to source contract and source contract to destination contract, we make use of setContractOnChain function. For more info, go to [`Setting up the Destination Contract on the Source Contract`](#Setting-up-the-Destination-Contract-on-the-Source-Contract)
 
-💵 **Send Route tokens to the source contract:**
+💵 **Get Route Test Tokens on your wallet address :**
 
-To send Route tokens to the source contract, copy the source contract address, visit https://devnet-faucet.routerprotocol.com/ , paste the address there and click on Get Route
+To get Route tokens on wallet address, copy the source contract address, visit https://devnet-faucet.routerprotocol.com/ , paste the address there and click on Get Route
 
 🚂 **Transfer minted ERC-20 tokens from source chain to destination chain:**
 
 To transfer minted ERC-20 tokens from source chain to destination chain, we make use of transferCrosschain function, which burns specified amount of tokens on source chain and mint the same amount on the destination chain. For more info, go to [`Transferring tokens from a source chain to a destination chain`](#Transferring-tokens-from-a-source-chain-to-a-destination-chain)
 
-🔍 **Browse to [Router Devnet Explorer](https://devnet-explorer.routerprotocol.com/crosstalks)** to see the transactions made. Wait for sometime till you see 4 green checks in your transaction column.This indicates, the tokens have been successfully transferred to the destination chain
+🔍 **Browse to [Router Testnet Explorer](https://explorer.testnet.routerchain.dev/crosstalks)** to see the transactions made. Wait for sometime till you see 4 green checks in your transaction column.This indicates, the tokens have been successfully transferred to the destination chain
 
 📖 For more detailed steps , refer [Step by Step guide for CrossChain ERC-20](https://github.com/router-resources/Workshop-ERC20)
 
@@ -88,17 +88,19 @@ For initiating the smart contract named "CrossChainERC20", the contract imports 
 
 3. **ERC20.sol**
 
-The "ICrossTalkApplication.sol" and "IGateway.sol" contracts are imported from the "evm-gateway-contract/contracts" and "ERC20.sol" from "openzeppelin/contracts/token".The "CrossChainERC20" contract implements the "ICrossTalkApplication" and "ERC20.sol" contract by inheriting from them. This means that the "CrossChainERC20" contract must have all the functions and variables defined in the "ICrossTalkApplication" contract. By importing and implementing these contracts, the "CrossChainERC20" contract will have access to their functionality and will be compatible with other contracts that follow the same standards.
+The "IDapp.sol" and "IGateway.sol" contracts are imported from the "evm-gateway-contract/contracts" and "ERC20.sol" from "openzeppelin/contracts/token".The "CrossChainERC20" contract implements the "IDapp" and "ERC20.sol" contract by inheriting from them. This means that the "CrossChainERC20" contract must have the functions and variables defined in the "IDapp" contract. By importing and implementing these contracts, the "CrossChainERC20" contract will have access to their functionality .
 
 ```sh
 //SPDX-License-Identifier: UNLICENSED
 pragma solidity >=0.8.0 <0.9.0;
 
-import "evm-gateway-contract/contracts/ICrossTalkApplication.sol";
-import "evm-gateway-contract/contracts/IGateway.sol";
+import "@routerprotocol/evm-gateway-contracts/contracts/IDapp.sol";
+import "@routerprotocol/evm-gateway-contracts/contracts/IGateway.sol";
+import "@routerprotocol/evm-gateway-contracts/contracts/Utils.sol";
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 
-contract CrossChainERC20 is ERC20, ICrossTalkApplication {
+contract CrossChainERC20 is ERC20, IDapp {
 }
 ```
 ## `Creating State Variables and the Constructor`
@@ -107,7 +109,7 @@ The smart contract has the following state variables:
 
 1. **onwer** - an address variable which stores the address from which the contract has been deployed.
 
-2. **gatewayContract** - an address variable which holds the address of the gateway contract. Gateway contracts are contracts which are pre-deployed on supported blockchains for cross-chain communication.The source chain's gateway contract communicates with the destination chain's gateway contract, enabling communication between application contracts deployed on different chains. Find GatewayContract Addresses [here](https://devnet.lcd.routerprotocol.com/router-protocol/router-chain/multichain/chain_config)
+2. **gatewayContract** - an address variable which holds the address of the gateway contract. Gateway contracts are contracts which are pre-deployed on supported blockchains for cross-chain communication.The source chain's gateway contract communicates with the destination chain's gateway contract, enabling communication between application contracts deployed on different chains. Find GatewayContract Addresses [here](https://lcd.testnet.routerchain.dev//router-protocol/router-chain/multichain/chain_config)
 
 3. **destGasLimit** - a uint64 variable which indicates the amount of gas required to execute the function that will handle cross-chain requests on the destination chain.
 
@@ -117,33 +119,38 @@ The constructor of the smart contract takes three parameters:
 
 1. **gatewayAddress** - an address variable which holds the address of the gateway contract.
 
-2. **_destGasLimit** - a uint64 variable which indicates the amount of gas required to execute the function that will handle cross-chain requests on the destination chain.
+2. **feePayerAddress** - a string variable which holds the address on the Router Chain from which the fees is deducted.
 
-Inside ERC20 contract contructor, pass the name of yout token followed by its symbol.
+Inside ERC20 contract contructor, pass the name of your token followed by its symbol.
 
 The smart contract extends the ERC20 standard and includes all the required functions and variables such as balanceOf, totalSupply, mint, burn and others.
 
 ```sh
- address owner;
- address public gatewayContract;
- uint64 public destGasLimit;
- mapping(uint64 => mapping(string => bytes)) public ourContractOnChains;
- constructor( address payable gatewayAddress,
-        uint64 _destGasLimit ) ERC20("Token","RTK")
-        {
-            gatewayContract=gatewayAddress;
-            destGasLimit=_destGasLimit;
-            owner=msg.sender;
-        }
+address public owner;
+
+  IGateway public gatewayContract;
+
+  uint64 public _destGasLimit;
+
+  mapping(string => bytes) public ourContractOnChains;
+
+  constructor(
+    address payable gatewayAddress,
+    string memory feePayerAddress
+  ) ERC20("My Token", "MTK") {
+    gatewayContract = IGateway(gatewayAddress);
+    owner = msg.sender;
+    gatewayContract.setDappMetadata(feePayerAddress);
+  }
+
 ```
 
 ## `Setting up the Destination Contract on the Source Contract`
 
 **setContractOnChain**:-
 
-The given code defines a setter function setContractOnChain which allows the owner to set the address of a destination contract on the source chain and visa versa. The function takes three parameters:
+The given code defines a setter function setContractOnChain which allows the owner to set the address of a destination contract on the source chain and visa versa. The function takes 2 parameters:
 
-chainType - a uint64 variable which represents the type of the chain (e.g. Ethereum, Binance Smart Chain, etc.)
 chainId - a string which represents the ID of the chain where the contract is deployed.
 contractAddress - an address variable which holds the address of the CrossChainERC20 contract deployed on the other chain we want to send the tokens to.
 The function first checks whether the caller is the owner by comparing the msg.sender with the admin address variable. If the caller is not the owner, the function will revert with an error message "only owner".
@@ -151,276 +158,407 @@ The function first checks whether the caller is the owner by comparing the msg.s
 If the caller is the owner, the function will convert the contractAddress to bytes using the toBytes function and store it in the ourContractOnChains mapping using the chainType and chainId as the keys.
 
 ```sh
-function setContractOnChain(
-    uint64 chainType, 
-    string memory chainId, 
+ function setContractOnChain(
+    string memory chainId,
     address contractAddress
-) external {
-    require(msg.sender == onwer, "only owner");
-    ourContractOnChains[chainType][chainId] = toBytes(contractAddress);
-}
+  ) external {
+    require(msg.sender == owner, "only owner");
+    ourContractOnChains[chainId] = toBytes(contractAddress);
+  }
 ```
 ## `Transferring tokens from a source chain to a destination chain`
 
 **transferCrossChain:-**
 
-This function allows a user to transfer their NFTs from their account on one chain to their account on a destination chain. The function burns the specified NFTs from the user's account, creates a cross-chain communication request to the destination chain, and passes the transfer parameters as payload in the request.
+This function allows a user to transfer their tokens from their account on source chain to their account on a destination chain. The function burns the specified amount of tokens from the user's account, creates a cross-chain communication request to the destination chain, and passes the transfer parameters as payload in the request.
 
 The function accepts the following parameters:
 
-1. **_dstchainType**: A uint64 representing the type of the destination chain. See the link provided in the description for the list of available chain types.
+1. **amount**: A uint256 variable specifying the amount of tokens we want to transfer to the recipient on the destination chain
 
 2. **_dstchainId**: A string representing the ID of the destination chain.
 
-3. **destGasPrice**: A uint64 representing the gas price of the destination chain.
+3. **recipient**: Wallet address on the destination chain we want to transfer our tokens to.
 
-4. **recipient**: Wallet address on the destination chain we want to transfer our tokens to.
+5. **requestMetadata**: Some static information for the request. This is created so that iDapps don’t have to encode it on-chain, they can just send it as a parameter to their iDapp depending on the destination chain Id passed by the user. The request metadata is a bytes encoded string consisting of the following parameters: 
+```sh
+    uint64 destGasLimit;
+    uint64 destGasPrice;
+    uint64 ackGasLimit;
+    uint64 ackGasPrice;
+    uint128 relayerFees;
+    uint8 ackType;
+    bool isReadCall;
+    string asmAddress;
+```
+The function burns the amount of tokens specified in the variable "amount" from the user's account and creates a cross-chain communication request to the destination chain. 
 
-5. **amount**: A uint256 variable specifying the amount of tokens we want to transfer to the recipient on the destination chain
+The function calls the iSend Function of the Gateway Contract to generate the cross-chain communication request to the destination chain.The iSend Function function is used to send a request to the Destination Chain .To execute a cross-chain request, users can call this function and pass the payload and required parameters from the source to the destination chain.
 
-The function burns the amount of tokens specified in the variable "amount" from the user's account and creates a cross-chain communication request to the destination chain. The payload for the request is generated by ABI encoding "amount" and "recipient".The function uses the ourContractOnChains mapping to retrieve the address of the CrossChainERC20 contract on the destination chain.
+**iSend Function** function takes in these parameters:-
 
-The function calls the requestToDest function of the Gateway Contract to generate the cross-chain communication request to the destination chain.The requestToDest function in Router's Gateway contracts is used to send a request to the Destination Chain .To execute a cross-chain request, users can call this function and pass the payload and required parameters from the source to the destination chain.
+1. **version**: Current version of Gateway contract which can be queried from the Gateway contract using the following function.
+2. **routeAmount**: If one wants to transfer Route tokens along with the call, they will have to pass the amount of tokens to be transferred here.
+3. **routeRecipient:** If one wants to transfer Route tokens along with the call, they will have to pass the address of recipient on the destination chain to which Route tokens will be minted on destination chain. 
+4. **destChainId:** Chain ID of the destination chain in string format.
+5. **requestMetadata:** Some static information for the request. This is created so that iDapps don’t have to encode it on-chain, they can just send it as a parameter to their iDapp depending on the destination chain Id passed by the user. 
+6. **requestPacket:** This is bytes encoded string consisting of two parameters:
 
-**requestToDest** function takes in these parameters:-
-
-1. **requestArgs** is a struct having these parameters:-
-a) expiryTimestamp: The timestamp by which your cross-chain call will expire
-b) isAtomicCalls: To make a batch of transactions atomic, set it to true else false
-c) feePayer: This specifies the address on the Router chain from which the cross-chain fee will be deducted. For example:- Utils.RequestArgs(1000000000000000, false, Utils.FeePayer.APP)
-
-2. **actType** and **actGasParams** should also be passed as parameters to requestToDest function to set the acknowledgement type , gas limit and gas price for acknowledgment
-Utils.AckType(Utils.AckType.NO_ACK),
-Utils.AckGasParams (destGasLimit, destGasPrice)
-
-3. **destinationChainParams**: is a struct having these parameter:-
-a)gasLimit: Required gas limit for executing cross-chain requests b)gasPrice: Gas price in wei to be used on the destination chain. c)destChainType: Represents the type of chain
-d)destChainId: Chain ID of destination chain, in string format.
-Utils.DestinationChainParams(destGasLimit,destGasPrice,_dstChainType,
-_dstChainId)
-
-4. **contractCalls**: struct , including an array of payloads and contract addresses to be sent to the destination chain. You can send any information you want, and each piece of data will be sent to the respective contract address that you specify in the arrays.
-struct ContractCalls {
-    bytes[] payloads;
-    bytes[] destContractAddresses;}
-
-
+    a. **destContractAddress:** This is the address of the smart contract on the destination chain which will handle the payload                that you send from the source chain to the destination chain.
+    b. **payload:** This is bytes containing the payload that you want to send to the destination chain. This can be anything depending          on your utility. In this case ,it is the recipient address on destination chain and the amount of tokens to be sent on the                destination chain 
+    
 ```sh
 function transferCrossChain(
-        uint64 _dstChainType,
-        string memory _dstChainId,
-        uint64 destGasPrice,
-        address recipient,
-        uint256 amount
-    ) public {
-        bytes memory payload = abi.encode(amount, recipient);
+    uint256 amount,
+    string calldata destChainId,
+    string calldata recipient,
+    bytes calldata requestMetadata
+  ) public payable {
+    require(
+      keccak256(ourContractOnChains[destChainId]) !=
+        keccak256(toBytes(address(0))),
+      "contract on dest not set"
+    );
 
-        // burn token on src chain from msg.msg.sender
-        _burn(msg.sender, amount);
-        bytes[] memory addresses = new bytes[](1);
-        addresses[0] = ourContractOnChains[_dstChainType][_dstChainId];
-        bytes[] memory payloads = new bytes[](1);
-        payloads[0] = payload;
+    require(
+      balanceOf(msg.sender) >= amount,
+      "ERC20: Amount cannot be greater than the balance"
+    );
 
-        IGateway(gatewayContract).requestToDest(
-            Utils.RequestArgs(1000000000000000, false, Utils.FeePayer.APP),
-            Utils.AckType(Utils.AckType.NO_ACK),
-            Utils.AckGasParams(destGasLimit, destGasPrice),
-            Utils.DestinationChainParams(
-                destGasLimit,
-                destGasPrice,
-                _dstChainType,
-                _dstChainId
-            ),
-            Utils.ContractCalls(payloads, addresses)
-        );
+   
+    _burn(msg.sender, amount);
 
-       
-    }
+    // encoding the data that we need to use on destination chain to mint the tokens there.
+    bytes memory packet = abi.encode(recipient, amount);
+    bytes memory requestPacket = abi.encode(
+      ourContractOnChains[destChainId],
+      packet
+    );
+
+    gatewayContract.iSend{ value: msg.value }(
+      1,
+      0,
+      string(""),
+      destChainId,
+      requestMetadata,
+      requestPacket
+    );
+  }
   ```
  
 ## `Handling a cross-chain request`
 
-**handleRequestFromSource function:-**
+**iReceive:-**
 
-This function is called by the Gateway contract on the destination chain, which is triggered when a cross-chain transfer request is sent by our contract on the source chain. This function receives several parameters, including the source contract address, the payload, the source chain ID, and the source chain type.
+This function is called by the Gateway contract on the destination chain, which is triggered when a cross-chain transfer request is sent to the destination chain. This function receives 3 parameters:-
 
-1. **srcContractAddress**: A bytes array that represents the address of the contract on the source chain that initiated the cross-chain transfer request.
+1. **requestSender**: A bytes array that represents the address of the contract on the source chain that initiated the cross-chain transfer request.
 
-2. **payload**: A bytes array that containing the payload we sent from the source chain.
+2. **packet**: A bytes array that containing the payload we sent from the source chain.
 
 3. **srcChainId**: A string that represents the ID of the source chain from which the cross-chain transfer request originated.
 
-4. **srcChainType**: An unsigned 64-bit integer that represents the type of the source chain from which the cross-chain transfer request originated.
+The function first checks that the call is made only by the Gateway contract and that the request is received from our contract on the source chain. If the conditions are not met, the function will revert the transaction.
 
-he function first checks that the call is made only by the Gateway contract and that the request is received from our contract on the source chain. If the conditions are not met, the function will revert the transaction.
+The packet that was sent with the cross-chain transfer request contains recipient's address, the amount of tokens to be minted on the destination chain. The function decodes the packet using abi.decode() function.
 
-The payload that was sent with the cross-chain transfer request contains recipient's address, the amount of tokens to be minted on the destination chain. The function decodes the payload using abi.decode() function.
-
-After decoding the payload, the function uses the _mint function of the ERC-20 contract from the OpenZeppelin library to mint the ERC-20 tokens to the recipient's address on the destination chain. 
+After decoding the packet, the function uses the _mint function of the ERC-20 contract from the OpenZeppelin library to mint the ERC-20 tokens to the recipient's address on the destination chain. 
 
 Finally, the function returns an empty string. Note : We have to return atleast an empty string as per the function definition.
 
 ```sh
-function handleRequestFromSource(
-        bytes memory srcContractAddress,
-        bytes memory payload,
-        string memory srcChainId,
-        uint64 srcChainType
-    ) external returns (bytes memory) {
+function iReceive(
+    string memory requestSender,
+    bytes memory packet,
+    string memory srcChainId
+  ) external override returns (bytes memory) {
+    require(msg.sender == address(gatewayContract), "only gateway");
+    require(
+      keccak256(ourContractOnChains[srcChainId]) ==
+        keccak256(bytes(requestSender))
+    );
 
-        
-        require(
-            keccak256(srcContractAddress) ==
-                keccak256(ourContractOnChains[srcChainType][srcChainId]),
-            "Invalid src chain"
-        );
-        (uint256 amount, address recipient) = abi.decode(
-            payload,
-            (uint256, address)
-        );
+    (bytes memory recipient, uint256 amount) = abi.decode(
+      packet,
+      (bytes, uint256)
+    );
+    _mint(toAddress(recipient), amount);
 
-        _mint(recipient, amount);
+    return abi.encode(srcChainId);
+  }
+```
+## `Getting metadata for the request`
 
-        
-        return "";
-    }
+Some static information for the request. This is created so that iDapps don’t have to encode it on-chain, they can just send it as a parameter to their iDapp depending on the destination chain Id passed by the user. The request metadata is a bytes encoded string consisting of the following parameters: 
+
+1. **destGasLimit:** Gas limit required for execution of the request on the destination chain. This can be calculated using tools like [hardhat-gas-reporter](https://www.npmjs.com/package/hardhat-gas-reporter).
+
+2. **destGasPrice:** Gas price of the destination chain. This can be calculated using the RPC of destination chain.
+If you don’t want to calculate it, just send `0` in its place and Router Chain will handle the real time gas price for you. 
+
+3. **ackGasLimit:** Gas limit required for execution of the acknowledgement coming from the destination chain back on the source chain. This can be calculated using tools like [hardhat-gas-reporter](https://www.npmjs.com/package/hardhat-gas-reporter).
+
+4. **ackGasPrice:** Gas price of the destination chain. This can be calculated using the RPC of source chain as shown in the above [snippet](https://www.notion.so/EVM-to-Other-Chain-Flow-de922b13e0fa4d7b8c3c24590ff8ef65).
+
+5. **relayerFees:** This is similar to priority fees that one pays on other chains. Router chain relayers execute your requests on the destination chain. So if you want your request to be picked up by relayer faster, this should be set to a higher number. If you pass really low amount, the Router chain will adjust it to some minimum amount.
+
+6. **ackType:** When the contract calls have been executed on the destination chain, the iDapp has the option to get an acknowledgement back to the source chain.
+    
+We provide the option to the user to be able to get this acknowledgement from the router chain to the source chain and perform some operation based on it.
+    
+    1. **ackType = 0:** You don’t want the acknowledgement to be forwarded back to the source chain.
+    2. **ackType = 1:** You only want to receive the acknowledgement back to the source chain in case the calls executed successfully on the destination chain and perform some operation after that.
+    3. **ackType = 2:** You only want to receive the acknowledgement back to the source chain in case the calls errored on the destination chain and perform some operation after that.
+    4. **ackType = 3:** You only want to receive the acknowledgement back to the source chain in both the cases (success and error) and perform some operation after that.
+7. **isReadCall:** We provide you the option to query a contract from another chain and get the data back on the source chain through acknowledgement. If you just want to query a contract on destination chain, set this to `true`.
+8. **asmAddress:** We also provide modular security framework for creating an additional layer of security on top of the security provided by Router Chain. These will be in the form of smart contracts on destination chain. The address of this contract needs to be passed in the form of string in this variable.
+    
+    The request metadata can be constructed using the following code:
+    
+```sh
+function getRequestMetadata(
+    uint64 destGasLimit,
+    uint64 destGasPrice,
+    uint64 ackGasLimit,
+    uint64 ackGasPrice,
+    uint128 relayerFees,
+    uint8 ackType,
+    bool isReadCall,
+    string calldata asmAddress
+  ) public pure returns (bytes memory) {
+    bytes memory requestMetadata = abi.encodePacked(
+      destGasLimit,
+      destGasPrice,
+      ackGasLimit,
+      ackGasPrice,
+      relayerFees,
+      ackType,
+      isReadCall,
+      asmAddress
+    );
+    return requestMetadata;
+  }
 ```
 ## `Handling the acknowledgement received from destination chain`
 
-**handleCrossTalkAck:-**
+**iAck:-**
 
-The handleCrossTalkAck function is a public function that needs to be implemented in the contract to satisfy the ICrossTalkApplication interface.
+The iAck function is a public function that needs to be implemented in the contract to satisfy the IDapp interface.
 The function takes three parameters: **eventIdentifier**, **execFlags**, and **execData** . However, since we are only implementing an empty function, we do not need to use these parameters.
 
-The handleCrossTalkAck function does not perform any operation on the contract or on the blockchain. It is implemented as an empty function and only serves as a placeholder to satisfy the interface requirements.
+The iAck function does not perform any operation here. It is implemented as an empty function and only serves as a placeholder to satisfy the interface requirements.
 
-Therefore, the handleCrossTalkAck function should be implemented with an empty body as shown in the code provided.
+Therefore, the iAck function should be implemented with an empty body as shown in the code provided.
 
 ```sh
-function handleCrossTalkAck(
-  uint64, //eventIdentifier,
-  bool[] memory, //execFlags,
-  bytes[] memory //execData
-) external view override {}
+function iAck(
+    uint256 requestIdentifier,
+    bool execFlag,
+    bytes memory execData
+  ) external override {}
+
 ```
 
 ## `Full Code`
 
 ```sh
-// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.17;
-import "evm-gateway-contract/contracts/ICrossTalkApplication.sol";
-import "evm-gateway-contract/contracts/IGateway.sol";
+// SPDX-License-Identifier: UNLICENSED
+pragma solidity >=0.8.0 <0.9.0;
+
+import "@routerprotocol/evm-gateway-contracts/contracts/IDapp.sol";
+import "@routerprotocol/evm-gateway-contracts/contracts/IGateway.sol";
+import "@routerprotocol/evm-gateway-contracts/contracts/Utils.sol";
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-contract CrossChainERC20 is ERC20, ICrossTalkApplication{
-  
-    address owner;
-    address public gatewayContract;
-    uint64 public destGasLimit;
-    mapping(uint64 => mapping(string => bytes)) public ourContractOnChains;
-constructor( address payable gatewayAddress,
-        uint64 _destGasLimit ) ERC20("Token","RTK")
-        {
-            gatewayContract=gatewayAddress;
-            destGasLimit=_destGasLimit;
-            owner=msg.sender;
-        }
-    modifier onlyOwner() {
-        require(owner == msg.sender, "Caller is not owner");
-        _;
+import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
+
+/// @title XERC20
+/// @author Yashika Goyal
+/// @notice This is a cross-chain ERC-20 smart contract to demonstrate how one can
+/// utilise Router CrossTalk for making cross-chain tokens
+contract XERC20 is ERC20, IDapp {
+  // address of the owner
+  address public owner;
+
+  // address of the gateway contract
+  IGateway public gatewayContract;
+
+  // gas limit required to handle cross-chain request on the destination chain
+  uint64 public _destGasLimit;
+
+  // chain id => address of our contract in bytes
+  mapping(string => bytes) public ourContractOnChains;
+
+  constructor(
+    address payable gatewayAddress,
+    string memory feePayerAddress
+  ) ERC20("My Token", "MTK") {
+    gatewayContract = IGateway(gatewayAddress);
+    owner = msg.sender;
+
+    //minting 20 tokens to deployer initially for testing
+    _mint(msg.sender, 20);
+
+    gatewayContract.setDappMetadata(feePayerAddress);
+  }
+
+  /// @notice function to set the fee payer address on Router Chain.
+  /// @param feePayerAddress address of the fee payer on Router Chain.
+  function setDappMetadata(string memory feePayerAddress) external {
+    require(msg.sender == owner, "only owner");
+    gatewayContract.setDappMetadata(feePayerAddress);
+  }
+
+  /// @notice function to set the Router Gateway Contract.
+  /// @param gateway address of the gateway contract.
+  function setGateway(address gateway) external {
+    require(msg.sender == owner, "only owner");
+    gatewayContract = IGateway(gateway);
+  }
+
+  function mint(address account, uint256 amount) external {
+    require(msg.sender == owner, "only owner");
+    _mint(account, amount);
+  }
+
+  /// @notice function to set the address of our ERC20 contracts on different chains.
+  /// This will help in access control when a cross-chain request is received.
+  /// @param chainId chain Id of the destination chain in string.
+  /// @param contractAddress address of the ERC20 contract on the destination chain.
+  function setContractOnChain(
+    string memory chainId,
+    address contractAddress
+  ) external {
+    require(msg.sender == owner, "only owner");
+    ourContractOnChains[chainId] = toBytes(contractAddress);
+  }
+
+  /// @notice function to generate a cross-chain token transfer request.
+  /// @param destChainId chain ID of the destination chain in string.
+  /// @param recipient address of the recipient of tokens on destination chain
+  /// @param amount amount of tokens to be transferred cross-chain
+  /// @param requestMetadata abi-encoded metadata according to source and destination chains
+  function transferCrossChain(
+    uint256 amount,
+    string calldata destChainId,
+    string calldata recipient,
+    bytes calldata requestMetadata
+  ) public payable {
+    require(
+      keccak256(ourContractOnChains[destChainId]) !=
+        keccak256(toBytes(address(0))),
+      "contract on dest not set"
+    );
+
+    require(
+      balanceOf(msg.sender) >= amount,
+      "ERC20: Amount cannot be greater than the balance"
+    );
+
+    // burning the tokens from the address of the user calling this function
+    _burn(msg.sender, amount);
+
+    // encoding the data that we need to use on destination chain to mint the tokens there.
+    bytes memory packet = abi.encode(recipient, amount);
+    bytes memory requestPacket = abi.encode(
+      ourContractOnChains[destChainId],
+      packet
+    );
+
+    gatewayContract.iSend{ value: msg.value }(
+      1,
+      0,
+      string(""),
+      destChainId,
+      requestMetadata,
+      requestPacket
+    );
+  }
+
+  /// @notice function to get the request metadata to be used while initiating cross-chain request
+  /// @return requestMetadata abi-encoded metadata according to source and destination chains
+  function getRequestMetadata(
+    uint64 destGasLimit,
+    uint64 destGasPrice,
+    uint64 ackGasLimit,
+    uint64 ackGasPrice,
+    uint128 relayerFees,
+    uint8 ackType,
+    bool isReadCall,
+    string calldata asmAddress
+  ) public pure returns (bytes memory) {
+    bytes memory requestMetadata = abi.encodePacked(
+      destGasLimit,
+      destGasPrice,
+      ackGasLimit,
+      ackGasPrice,
+      relayerFees,
+      ackType,
+      isReadCall,
+      asmAddress
+    );
+    return requestMetadata;
+  }
+
+  /// @notice function to handle the cross-chain request received from some other chain.
+  /// @param requestSender address of the contract on source chain that initiated the request.
+  /// @param packet the payload sent by the source chain contract when the request was created.
+  /// @param srcChainId chain ID of the source chain in string.
+  function iReceive(
+    string memory requestSender,
+    bytes memory packet,
+    string memory srcChainId
+  ) external override returns (bytes memory) {
+    require(msg.sender == address(gatewayContract), "only gateway");
+    require(
+      keccak256(ourContractOnChains[srcChainId]) ==
+        keccak256(bytes(requestSender))
+    );
+
+    (bytes memory recipient, uint256 amount) = abi.decode(
+      packet,
+      (bytes, uint256)
+    );
+    _mint(toAddress(recipient), amount);
+
+    return abi.encode(srcChainId);
+  }
+
+  /// @notice function to handle the acknowledgement received from the destination chain
+  /// back on the source chain.
+  /// @param requestIdentifier event nonce which is received when we create a cross-chain request
+  /// We can use it to keep a mapping of which nonces have been executed and which did not.
+  /// @param execFlag a boolean value suggesting whether the call was successfully
+  /// executed on the destination chain.
+  /// @param execData returning the data returned from the handleRequestFromSource
+  /// function of the destination chain.
+  function iAck(
+    uint256 requestIdentifier,
+    bool execFlag,
+    bytes memory execData
+  ) external override {}
+
+  /// @notice function to convert type address into type bytes.
+  /// @param a address to be converted
+  /// @return b bytes pertaining to the address
+  function toBytes(address a) public pure returns (bytes memory b) {
+    assembly {
+      let m := mload(0x40)
+      a := and(a, 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF)
+      mstore(add(m, 20), xor(0x140000000000000000000000000000000000000000, a))
+      mstore(0x40, add(m, 52))
+      b := m
     }
-        function mint(address to, uint256 amount) public onlyOwner {
-        _mint(to, amount);
+  }
+
+  /// @notice Function to convert bytes to address
+  /// @param _bytes bytes to be converted
+  /// @return addr address pertaining to the bytes
+  function toAddress(bytes memory _bytes) internal pure returns (address addr) {
+    bytes20 srcTokenAddress;
+    assembly {
+      srcTokenAddress := mload(add(_bytes, 0x20))
     }
-        function setContractOnChain(
-        uint64 chainType,
-        string memory chainId,
-        address contractAddress
-    ) external onlyOwner {
-        ourContractOnChains[chainType][chainId] = toBytes(contractAddress);
-    }
-        function transferCrossChain(
-        uint64 _dstChainType,
-        string memory _dstChainId, // it can be uint, why it is string?
-        uint64 destGasPrice,
-        address recipient,
-        uint256 amount
-    ) public {
-        bytes memory payload = abi.encode(amount, recipient);
-
-        // burn token on src chain from msg.msg.sender
-        _burn(msg.sender, amount);
-
-      
-
-        bytes[] memory addresses = new bytes[](1);
-        addresses[0] = ourContractOnChains[_dstChainType][_dstChainId];
-        bytes[] memory payloads = new bytes[](1);
-        payloads[0] = payload;
-
-        IGateway(gatewayContract).requestToDest(
-            Utils.RequestArgs(1000000000000000, false, Utils.FeePayer.APP),
-            Utils.AckType(Utils.AckType.NO_ACK),
-            Utils.AckGasParams(destGasLimit, destGasPrice),
-            Utils.DestinationChainParams(
-                destGasLimit,
-                destGasPrice,
-                _dstChainType,
-                _dstChainId
-            ),
-            Utils.ContractCalls(payloads, addresses)
-        );
-
-       
-    }
-        function toBytes(address a) public pure returns (bytes memory b) {
-        assembly {
-            let m := mload(0x40)
-            a := and(a, 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF)
-            mstore(
-                add(m, 20),
-                xor(0x140000000000000000000000000000000000000000, a)
-            )
-            mstore(0x40, add(m, 52))
-            b := m
-        }
-    }
-    function setDestinationGasPrice(uint64 _destGasLimit) public{
-        destGasLimit=_destGasLimit;
-    }
-    function handleRequestFromSource(
-        bytes memory srcContractAddress,
-        bytes memory payload,
-        string memory srcChainId,
-        uint64 srcChainType
-    ) external returns (bytes memory) {
-
-        
-        require(
-            keccak256(srcContractAddress) ==
-                keccak256(ourContractOnChains[srcChainType][srcChainId]),
-            "Invalid src chain"
-        );
-        (uint256 amount, address recipient) = abi.decode(
-            payload,
-            (uint256, address)
-        );
-
-        _mint(recipient, amount);
-
-        
-        return "";
-    }
-
-  function handleCrossTalkAck(
-        uint64, // eventIdentifier
-        bool[] memory, // execFlags
-        bytes[] memory // execData
-    ) external {}
-
-
-
+    addr = address(srcTokenAddress);
+  }
 }
-
 ```
