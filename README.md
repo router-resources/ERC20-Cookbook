@@ -82,11 +82,13 @@ To transfer minted ERC-20 tokens from source chain to destination chain, we make
 
 For initiating the smart contract named "CrossChainERC20", the contract imports four external contracts :-
 
-1. **ICrossTalkApplication.sol**
+1. **IDapp.sol**
 
 2. **IGateway.sol**
 
-3. **ERC20.sol**
+3. **Utils.sol**
+
+4. **ERC20.sol**
 
 The "IDapp.sol" and "IGateway.sol" contracts are imported from the "evm-gateway-contract/contracts" and "ERC20.sol" from "openzeppelin/contracts/token".The "CrossChainERC20" contract implements the "IDapp" and "ERC20.sol" contract by inheriting from them. This means that the "CrossChainERC20" contract must have the functions and variables defined in the "IDapp" contract. By importing and implementing these contracts, the "CrossChainERC20" contract will have access to their functionality .
 
