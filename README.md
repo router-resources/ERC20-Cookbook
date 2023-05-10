@@ -306,11 +306,13 @@ If you don’t want to calculate it, just send `0` in its place and Router Chain
     
 We provide the option to the user to be able to get this acknowledgement from the router chain to the source chain and perform some operation based on it.
     
-    1. **ackType = 0:** You don’t want the acknowledgement to be forwarded back to the source chain.
-    2. **ackType = 1:** You only want to receive the acknowledgement back to the source chain in case the calls executed successfully on the destination chain and perform some operation after that.
-    3. **ackType = 2:** You only want to receive the acknowledgement back to the source chain in case the calls errored on the destination chain and perform some operation after that.
-    4. **ackType = 3:** You only want to receive the acknowledgement back to the source chain in both the cases (success and error) and perform some operation after that.
+  1. **ackType = 0:** You don’t want the acknowledgement to be forwarded back to the source chain.
+  2. **ackType = 1:** You only want to receive the acknowledgement back to the source chain in case the calls executed successfully on the destination chain and perform some operation after that.
+  3. **ackType = 2:** You only want to receive the acknowledgement back to the source chain in case the calls errored on the destination chain and perform some operation after that.
+  4. **ackType = 3:** You only want to receive the acknowledgement back to the source chain in both the cases (success and error) and perform some operation after that.
+  
 7. **isReadCall:** We provide you the option to query a contract from another chain and get the data back on the source chain through acknowledgement. If you just want to query a contract on destination chain, set this to `true`.
+
 8. **asmAddress:** We also provide modular security framework for creating an additional layer of security on top of the security provided by Router Chain. These will be in the form of smart contracts on destination chain. The address of this contract needs to be passed in the form of string in this variable.
     
     The request metadata can be constructed using the following code:
