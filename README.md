@@ -34,10 +34,10 @@ git clone https://github.com/router-resources/ERC20-Cookbook.git
 
 # 🧭 `Table of contents`
 - [🧭 Table of contents](#-table-of-contents)
-- [`What is an ERC20 Token ?`](#What-is-an-ERC20-Token?)
-- [`How to make a simple ERC20 Token ?`](#How-to-make-a-simple-ERC20-Token?)
+- [`What is an ERC20 Token ?`](#What-is-an-ERC20-Token-?)
+- [`How to make a simple ERC20 Token ?`](#How-to-make-a-simple-ERC20-Token-?)
 - [`Need for CrossChain ?`](#Need-for-CrossChain)
-- [`What is a CrossChain ERC20 Token ?`](#What-is-CrossChain-ERC20-Token?)
+- [`What is a CrossChain ERC20 Token ?`](#What-is-CrossChain-ERC20-Token-?)
 - [`Understanding Router CrossTalk`](#Understanding-Router-CrossTalk)
 - [`CrossTalk Cheatsheet`](#Understanding-Router-CrossTalk)
 - [`Initiating the Contract`](#Initiating-the-Contract)
