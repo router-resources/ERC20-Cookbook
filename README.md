@@ -34,7 +34,7 @@ Please check the [official documentation of Router Protocol](https://www.routerp
 
 ## `What is an ERC20 Token ?`
 
-![_117548721_nfts2](https://user-images.githubusercontent.com/124175970/224860849-f037eb49-0288-49b8-a922-e08015b5280a.jpg)
+![_117548721_nfts2](https://ph-files.imgix.net/a384cba0-ea83-4b99-b92b-06ab3639b493.gif?auto=format)
 
 ERC20 Tokens are digital assets that are created using the Ethereum blockchain technology. They are programmable tokens that can be used to represent various types of assets, such as loyalty points, shares of stock, or even cryptocurrencies. ERC20 Tokens are fungible, which means that each token has the same value and can be exchanged for another token of the same value.
 
