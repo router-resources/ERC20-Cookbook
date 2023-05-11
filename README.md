@@ -32,6 +32,175 @@ Please check the [official documentation of Router Protocol](https://www.routerp
 - [`Full Code`](#Full-Code)
 - [🚀 Steps](#-quick-start)
 
+## `What is an ERC20 Token ?`
+
+![_117548721_nfts2](https://user-images.githubusercontent.com/124175970/224860849-f037eb49-0288-49b8-a922-e08015b5280a.jpg)
+
+ERC20 Tokens are digital assets that are created using the Ethereum blockchain technology. They are programmable tokens that can be used to represent various types of assets, such as loyalty points, shares of stock, or even cryptocurrencies. ERC20 Tokens are fungible, which means that each token has the same value and can be exchanged for another token of the same value.
+
+The "ERC20" part of the name refers to the technical standard that is used to create and manage these tokens. This standard defines the rules for creating new tokens and the functions that can be used to transfer and manage them.
+
+## `How to make a simple ERC20 Token ?`
+
+ERC20 is a standard for creating fungible tokens on the Ethereum blockchain. The ERC20 standard is like a set of rules that all tokens on the Ethereum blockchain must follow. Think of it like a recipe for making a soup - you need certain ingredients and instructions to make sure it turns out right.
+
+ERC20 defines a specific set of functions that tokens must have, like the ability to be transferred from one address to another, the ability to check the token balance of an address, and the ability to approve another address to transfer tokens on behalf of the owner. These functions are like different steps in the recipe.
+
+Some of the functions included in the ERC20 standard are:
+
+**totalSupply:** This function returns the total number of tokens in existence.
+
+**balanceOf:** This function returns the token balance of a specific address.
+
+**transfer:** This function allows the owner of a token to transfer tokens to another address.
+
+**approve:** This function allows an address to approve another address to transfer tokens on its behalf.
+
+**allowance:** This function returns the amount of tokens that an approved address is allowed to transfer.
+
+**transferFrom:** This function allows an approved address to transfer tokens on behalf of the owner.
+
+Instead of writing all the code for creating an ERC20 token from scratch, developers can use OpenZeppelin's pre-written code to make their own tokens. This can save a lot of time and effort and can also help ensure that the code works correctly and is secure.
+
+With OpenZeppelin, developers can just follow the pre-written code to create their own ERC20 tokens without having to start from scratch. It's kind of like using pre-made ingredients to cook a meal - instead of making each ingredient from scratch, you can just use pre-made ingredients to cook something faster and easier.
+
+**Simple ERC20 contract using Openzeppelin**
+
+```sh
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.9;
+
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+
+contract MyToken is ERC20, ERC20Burnable, Ownable {
+    constructor() ERC20("MyToken", "MTK") {}
+
+    function mint(address to, uint256 amount) public onlyOwner {
+        _mint(to, amount);
+    }
+}
+```
+
+
+
+You can use the above code and deploy using [Remix IDE](https://www.remix.ethereum.org) and Hurray !, you've made your own crypto currency.
+
+## `Need for CrossChain`
+
+**Bitcoin**
+
+![images](https://user-images.githubusercontent.com/124175970/224867383-360da83c-5053-4f5b-aff3-8c9d1b00942e.png)
+
+Back in 2009, Bitcoin was created by an unknown person called Satoshi Nakamoto, introducing the concept of decentralization. It eliminated the need for a central authority or intermediary to verify transactions, making it possible for people to transact with each other directly.
+
+**Problem with Bitcoin**
+
+Bitcoin was not designed to support smart contracts, which limits its ability to create complex decentralized applications. 
+The inability to deploy smart contracts on the Bitcoin blockchain, makes the scope of decentralization , limited to a very small area.
+
+**Ethereum**
+
+![ethereum-1](https://user-images.githubusercontent.com/124175970/224869429-53317c46-6407-4fa7-b52a-76e691f333e9.jpeg)
+
+Ethereum is a blockchain, which serves as a state machine where people can deploy smart contracts, This enables people to build Dapps (Decentralised Applications on the top of Ethereum" 
+
+**Problem with Ethereum**
+
+Ethereum is not scalable.The cost of gas fees which one need to pay to interact with the smart contracts is quite high. This hinders the businesses of the Dapps buit on the top of Ethereum.
+
+**L2 Solutions of Ethereum**
+
+<img width="400" alt="image" src="https://user-images.githubusercontent.com/124175970/224869825-bfcb3ac6-e0df-40fe-96b0-ca01ccacfe0b.png">
+
+Many L2 solutions for Ethereum are created, keeping in mind Ethereum isn't scalable. The gas fee which one need to pay in order to intereact with the smart conracts is significantly cheaper than Ethereum.
+
+**Problem with L2 solutions of Ethereum**
+
+L2 solutions solves the problem of scalability , but they have much lesser nodes as compared to Ethereum making them less decentralised and secure than Ethereum.
+
+**Blockchain Trilemma**
+
+<img width="488" alt="image" src="https://user-images.githubusercontent.com/124175970/224870341-b8750142-f1e6-43cd-abf5-607fcc6add3e.png">
+
+So, we can clearly see, solving scalability , degrades security and decentralisation and having more decentralisation and security results in making the chain less scalable .
+
+This is known as Blockchain Trilemma, where it's not possible to ensure scalability, decentralisation and security at the same time . 
+
+**Need for Crosschain**
+
+Going CrossChain helps us leverage all these 3 features (Decentralisation + Scalabity + Security ) used for different operations performed in a single Dapp.
+This is exactly , where the Router comes in ! It is an interoperability layer to connect blockchains with a goal to integrate all the blockchains within the ecosystem. 
+
+<img width="581" alt="image" src="https://user-images.githubusercontent.com/124175970/224871477-a1f06b33-0b74-4244-9b3f-3291e246950d.png">
+
+## `What is a CrossChain ERC20 Token ?`
+
+CrossChain ERC20 tokens are tokens that can exist and be traded on multiple different blockchain networks. This means that an ERC20 token created on one blockchain network, such as Ethereum, can be moved to and traded on another blockchain network, such as Binance Smart Chain or Polygon.
+
+Imagine you have an ERC20 token on the Ethereum blockchain that represents a digital asset. If you want to sell or trade that token on another blockchain network, you would need to create a new token on that network, which can be time-consuming and costly. However, with CrossChain ERC20 tokens, you can simply transfer the original token to the new blockchain network, enabling you to sell or trade it without having to go through the process of creating a new one.
+
+<img width="461" alt="image" src="https://user-images.githubusercontent.com/124175970/224872315-6b455b3f-e822-400d-ab2d-cb81ad135f5d.png">
+
+
+## `Understanding Router CrossTalk`
+
+**Overview**
+
+Router's CrossTalk library is a tool that makes it easy for different blockchains to communicate with each other. This library is designed to work with Router's infrastructure, and allows contracts on one blockchain to talk to contracts on another blockchain. You can use this library in your own development projects to make it easier for your contracts to communicate across different blockchains, without disrupting other parts of your project.
+
+**Gateway Contracts**
+
+Gateway contracts are contracts which are pre-deployed on supported blockchains for cross-chain communication.The source chain's gateway contract communicates with the destination chain's gateway contract, enabling communication between application contracts deployed on different chains
+
+[Gateway Contract Addresses](https://devnet-alpha.lcd.routerprotocol.com/router-protocol/router-chain/multichain/chain_config)
+
+**CrossTalk Workflow**
+
+<img width="503" alt="image" src="https://user-images.githubusercontent.com/124175970/224872866-cb82abb4-d072-4c7d-bc46-672a18afbb54.png">
+
+When a user wants to execute a cross-chain request, they call the "iSend" function on the Router's Gateway contract. They pass the payload of data to be transferred from the source chain to the destination chain along with the necessary parameters. The "iSend" function sends the data to the destination chain where the user's contract with the "iRecieve" function is waiting to receive it.Once the data is received, the "iRecieve" function processes it on the destination chain. After processing the data, the destination chain sends an acknowledgment back to the source chain where "iAck" function in the user's contract is used to handle it.
+
+**Understanding CrossTalk Functions**
+
+Router’s Gateway contracts have a function named iSend that facilitates the transmission of a cross-chain message. Whenever users want to execute a cross-chain request, they can call this function by passing the payload to be transferred from the source to the destination chain along with the required parameters.
+
+In addition to calling the aforementioned function, CrossTalk users will also have to implement two functions on their contracts:
+
+To handle a cross-chain request on the destination chain, users are required to include a iRecieve function on their destination chain contracts.
+To process the acknowledgment of their requests on the source chain, user will have to implement a iAck function on their source chain contracts.
+
+**iSend parameters**
+
+1. **version**: Current version of Gateway contract which can be queried from the Gateway contract using the following function.
+2. **routeAmount**: If one wants to transfer Route tokens along with the call, they will have to pass the amount of tokens to be transferred here.
+3. **routeRecipient:** If one wants to transfer Route tokens along with the call, they will have to pass the address of recipient on the destination chain to which Route tokens will be minted on destination chain. 
+4. **destChainId:** Chain ID of the destination chain in string format.
+5. **requestMetadata:** Some static information for the request. This is created so that iDapps don’t have to encode it on-chain, they can just send it as a parameter to their iDapp depending on the destination chain Id passed by the user. 
+6. **requestPacket:** This is bytes encoded string consisting of two parameters:
+
+    a. **destContractAddress:** This is the address of the smart contract on the destination chain which will handle the payload                that you send from the source chain to the destination chain.
+    b. **payload:** This is bytes containing the payload that you want to send to the destination chain. This can be anything depending          on your utility. In this case ,it is the recipient address on destination chain and the amount of tokens to be sent on the                destination chain 
+
+
+**iRecieve**
+
+This function is called by the Gateway contract on the destination chain, which is triggered when a cross-chain transfer request is sent to the destination chain. This function receives 3 parameters:-
+
+1. **requestSender**: A bytes array that represents the address of the contract on the source chain that initiated the cross-chain transfer request.
+
+2. **packet**: A bytes array that containing the payload we sent from the source chain.
+
+3. **srcChainId**: A string that represents the ID of the source chain from which the cross-chain transfer request originated.
+
+
+
+
+![Click here to Open Router CrossTalk Cheatsheet](https://user-images.githubusercontent.com/124175970/224877602-3e7c7bd2-700c-4ac8-96f5-0e391f8859bf.png)
+
+[Click here to download Router CrossTalk Cheatsheet](https://github.com/router-resources/CrossChainNFTAssignment/files/10963540/crosstalk.pdf)
+
 
 
 # `CrossChain ERC-20`
