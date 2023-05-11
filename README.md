@@ -17,7 +17,7 @@ Router Protocol is a solution introduced to address the issues hindering the usa
 Please check the [official documentation of Router Protocol](https://www.routerprotocol.com/)
 # 🧭 `Table of contents`
 - [🧭 Table of contents](#-table-of-contents)
-- [`What is an ERC20 tOKEN ?`](#What-is-an-NFT-?)
+- [`What is an ERC20 Token ?`](#What-is-an-NFT-?)
 - [`How to make a simple ERC20 Token ?`](#How-to-make-a-simple-NFT-?)
 - [`Need for CrossChain ?`](#Need-for-CrossChain)
 - [`What is a CrossChain ERC20 Token ?`](#What-is-CrossChain-NFT-?)
