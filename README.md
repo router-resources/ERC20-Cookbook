@@ -15,12 +15,29 @@
 Router Protocol is a solution introduced to address the issues hindering the usability of cross-chain liquidity migration in the DeFi ecosystem. It acts as a bridge connecting various layer 1 and layer 2 blockchains, allowing for the flow of contract-level data across them. The Router Protocol can either transfer tokens between chains or initiate operations on one chain and execute them on another.
 
 Please check the [official documentation of Router Protocol](https://www.routerprotocol.com/)
+
+
+
+# ⭐️ `Star us`
+
+If this repository helps you build cross-chain dapps faster and easier - please star this project, every star makes us very happy!
+
+# 🤝 `Need help?`
+
+If you need help or have other some questions - don't hesitate to write in our discord channel and we will check asap. [Discord link](https://discord.gg/xvx2pFu9). The best thing about this is the super active community ready to help at any time! We help each other.
+
+# 🤝 `Clone or fork this repository`
+
+```sh
+git clone https://github.com/router-resources/ERC20-Cookbook.git
+```
+
 # 🧭 `Table of contents`
 - [🧭 Table of contents](#-table-of-contents)
-- [`What is an ERC20 Token ?`](#What-is-an-NFT-?)
-- [`How to make a simple ERC20 Token ?`](#How-to-make-a-simple-NFT-?)
+- [`What is an ERC20 Token ?`](#What-is-an-ERC20-Token?)
+- [`How to make a simple ERC20 Token ?`](#How-to-make-a-simple-ERC20-Token?)
 - [`Need for CrossChain ?`](#Need-for-CrossChain)
-- [`What is a CrossChain ERC20 Token ?`](#What-is-CrossChain-NFT-?)
+- [`What is a CrossChain ERC20 Token ?`](#What-is-CrossChain-ERC20-Token?)
 - [`Understanding Router CrossTalk`](#Understanding-Router-CrossTalk)
 - [`CrossTalk Cheatsheet`](#Understanding-Router-CrossTalk)
 - [`Initiating the Contract`](#Initiating-the-Contract)
@@ -28,6 +45,7 @@ Please check the [official documentation of Router Protocol](https://www.routerp
 - [`Setting up the Destination Contract on the Source Contract`](#Setting-up-the-Destination-Contract-on-the-Source-Contract)
 - [`Transferring tokens from a source chain to a destination chain`](#Transferring-tokens-from-a-source-chain-to-a-destination-chain)
 - [`Handling a cross-chain request`](#Handling-a-cross-chain-request)
+- [`Getting metadata for the request`](#Getting-metadata-for-the-request)
 - [`Handling the acknowledgement received from destination chain`](#Handling-the-acknowledgement-received-from-destination-chain)
 - [`Full Code`](#Full-Code)
 - [🚀 Steps](#-quick-start)
@@ -218,63 +236,6 @@ Please check the [official documentation of Router Protocol](https://www.routerp
 ![1234](https://user-images.githubusercontent.com/124175970/222918389-d6d0a046-bf4c-4737-8577-35794efba8f2.gif)
 
 
-# ⭐️ `Star us`
-
-If this repository helps you build cross-chain dapps faster and easier - please star this project, every star makes us very happy!
-
-# 🤝 `Need help?`
-
-If you need help or have other some questions - don't hesitate to write in our discord channel and we will check asap. [Discord link](https://discord.gg/xvx2pFu9). The best thing about this is the super active community ready to help at any time! We help each other.
-
-# 🤝 `Clone or fork this repository`
-
-```sh
-git clone https://github.com/router-resources/ERC20-Cookbook.git
-```
-
-# 🎯 `Steps`
-
-
-✍️ **Setting up your editor:**
-
-Browse to [Remix IDE](https://remix.ethereum.org/) and create a new file with ".sol" extension.
-
-💿 **Install all dependencies:**
-
-You don't need to install any dependencies. Remix automatically downloads all the dependencies for you during the time of compile.
-
-🧑‍💻 **Create your CrossChain ERC-20 token Contract:**
-
-To create the contract for your CrossChain ERC-20 token , copy-paste the [`Code`](#Full-Code) in the Remix Work Area and compile it.
-The Code has been comprehensively explained in this repository. Click [`here`](#Initiating-the-Contract) for the explanation.
-
-🚀 **Deploying the Contract:**
-
-You need to deploy the same contract on the source chain as well as the destination chain and pass in the required parameters to the [`constructer`](#Creating-state-variables-and-the-constructor) while deploying.
-
-🔨 **Mint created ERC-20 token on Source Chain:**
-
-In order to mint the created ERC-20 token on the source , mint function defined in openzeppelin can be used.
-
-🤝 **Set destination contract to source contract and source contract to destination contract:**
-
-To set destination contract to source contract and source contract to destination contract, we make use of setContractOnChain function. For more info, go to [`Setting up the Destination Contract on the Source Contract`](#Setting-up-the-Destination-Contract-on-the-Source-Contract)
-
-💵 **Get Route Test Tokens on your wallet address :**
-
-To get Route tokens on wallet address, copy the source contract address, visit https://devnet-faucet.routerprotocol.com/ , paste the address there and click on Get Route
-
-🚂 **Transfer minted ERC-20 tokens from source chain to destination chain:**
-
-To transfer minted ERC-20 tokens from source chain to destination chain, we make use of transferCrosschain function, which burns specified amount of tokens on source chain and mint the same amount on the destination chain. For more info, go to [`Transferring tokens from a source chain to a destination chain`](#Transferring-tokens-from-a-source-chain-to-a-destination-chain)
-
-🔍 **Browse to [Router Testnet Explorer](https://explorer.testnet.routerchain.dev/crosstalks)** to see the transactions made. Wait for sometime till you see 4 green checks in your transaction column.This indicates, the tokens have been successfully transferred to the destination chain
-
-📖 For more detailed steps , refer [Step by Step guide for CrossChain ERC-20](https://github.com/router-resources/Workshop-ERC20)
-
-
-
-  
 ## `Initiating the Contract`
 
 For initiating the smart contract named "CrossChainERC20", the contract imports four external contracts :-
@@ -763,3 +724,43 @@ contract XERC20 is ERC20, IDapp {
   }
 }
 ```
+# 🎯 `Steps`
+
+
+✍️ **Setting up your editor:**
+
+Browse to [Remix IDE](https://remix.ethereum.org/) and create a new file with ".sol" extension.
+
+💿 **Install all dependencies:**
+
+You don't need to install any dependencies. Remix automatically downloads all the dependencies for you during the time of compile.
+
+🧑‍💻 **Create your CrossChain ERC-20 token Contract:**
+
+To create the contract for your CrossChain ERC-20 token , copy-paste the [`Code`](#Full-Code) in the Remix Work Area and compile it.
+The Code has been comprehensively explained in this repository. Click [`here`](#Initiating-the-Contract) for the explanation.
+
+🚀 **Deploying the Contract:**
+
+You need to deploy the same contract on the source chain as well as the destination chain and pass in the required parameters to the [`constructer`](#Creating-state-variables-and-the-constructor) while deploying.
+
+🔨 **Mint created ERC-20 token on Source Chain:**
+
+In order to mint the created ERC-20 token on the source , mint function defined in openzeppelin can be used.
+
+🤝 **Set destination contract to source contract and source contract to destination contract:**
+
+To set destination contract to source contract and source contract to destination contract, we make use of setContractOnChain function. For more info, go to [`Setting up the Destination Contract on the Source Contract`](#Setting-up-the-Destination-Contract-on-the-Source-Contract)
+
+💵 **Get Route Test Tokens on your wallet address :**
+
+To get Route tokens on wallet address, copy the source contract address, visit https://devnet-faucet.routerprotocol.com/ , paste the address there and click on Get Route
+
+🚂 **Transfer minted ERC-20 tokens from source chain to destination chain:**
+
+To transfer minted ERC-20 tokens from source chain to destination chain, we make use of transferCrosschain function, which burns specified amount of tokens on source chain and mint the same amount on the destination chain. For more info, go to [`Transferring tokens from a source chain to a destination chain`](#Transferring-tokens-from-a-source-chain-to-a-destination-chain)
+
+🔍 **Browse to [Router Testnet Explorer](https://explorer.testnet.routerchain.dev/crosstalks)** to see the transactions made. Wait for sometime till you see 4 green checks in your transaction column.This indicates, the tokens have been successfully transferred to the destination chain
+
+📖 For more detailed steps , refer [Step by Step guide for CrossChain ERC-20](https://github.com/router-resources/Workshop-ERC20)
+
