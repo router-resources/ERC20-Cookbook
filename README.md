@@ -15,6 +15,24 @@
 Router Protocol is a solution introduced to address the issues hindering the usability of cross-chain liquidity migration in the DeFi ecosystem. It acts as a bridge connecting various layer 1 and layer 2 blockchains, allowing for the flow of contract-level data across them. The Router Protocol can either transfer tokens between chains or initiate operations on one chain and execute them on another.
 
 Please check the [official documentation of Router Protocol](https://www.routerprotocol.com/)
+# 🧭 `Table of contents`
+- [🧭 Table of contents](#-table-of-contents)
+- [`What is an ERC20 tOKEN ?`](#What-is-an-NFT-?)
+- [`How to make a simple ERC20 Token ?`](#How-to-make-a-simple-NFT-?)
+- [`Need for CrossChain ?`](#Need-for-CrossChain)
+- [`What is a CrossChain ERC20 Token ?`](#What-is-CrossChain-NFT-?)
+- [`Understanding Router CrossTalk`](#Understanding-Router-CrossTalk)
+- [`CrossTalk Cheatsheet`](#Understanding-Router-CrossTalk)
+- [`Initiating the Contract`](#Initiating-the-Contract)
+- [`Creating state variables and the constructor`](#Creating-state-variables-and-the-constructor)
+- [`Setting up the Destination Contract on the Source Contract`](#Setting-up-the-Destination-Contract-on-the-Source-Contract)
+- [`Transferring tokens from a source chain to a destination chain`](#Transferring-tokens-from-a-source-chain-to-a-destination-chain)
+- [`Handling a cross-chain request`](#Handling-a-cross-chain-request)
+- [`Handling the acknowledgement received from destination chain`](#Handling-the-acknowledgement-received-from-destination-chain)
+- [`Full Code`](#Full-Code)
+- [🚀 Steps](#-quick-start)
+
+
 
 # `CrossChain ERC-20`
 
@@ -83,16 +101,6 @@ To transfer minted ERC-20 tokens from source chain to destination chain, we make
 
 📖 For more detailed steps , refer [Step by Step guide for CrossChain ERC-20](https://github.com/router-resources/Workshop-ERC20)
 
-# 🧭 `Table of contents`
-- [🚀 Steps](#-quick-start)
-- [🧭 Table of contents](#-table-of-contents)
-- [`Initiating the Contract`](#Initiating-the-Contract)
-- [`Creating state variables and the constructor`](#Creating-state-variables-and-the-constructor)
-- [`Setting up the Destination Contract on the Source Contract`](#Setting-up-the-Destination-Contract-on-the-Source-Contract)
-- [`Transferring tokens from a source chain to a destination chain`](#Transferring-tokens-from-a-source-chain-to-a-destination-chain)
-- [`Handling a cross-chain request`](#Handling-a-cross-chain-request)
-- [`Handling the acknowledgement received from destination chain`](#Handling-the-acknowledgement-received-from-destination-chain)
-- [`Full Code`](#Full-Code)
 
 
   
