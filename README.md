@@ -143,7 +143,7 @@ CrossChain ERC20 tokens are tokens that can exist and be traded on multiple diff
 
 Imagine you have an ERC20 token on the Ethereum blockchain that represents a digital asset. If you want to sell or trade that token on another blockchain network, you would need to create a new token on that network, which can be time-consuming and costly. However, with CrossChain ERC20 tokens, you can simply transfer the original token to the new blockchain network, enabling you to sell or trade it without having to go through the process of creating a new one.
 
-<img width="461" alt="image" src="https://user-images.githubusercontent.com/124175970/224872315-6b455b3f-e822-400d-ab2d-cb81ad135f5d.png">
+<img width="461" alt="image" src="https://stealthex.io/blog/wp-content/uploads/2022/06/%D0%A1ross_chain_bridge-5-min.png">
 
 
 ## `Understanding Router CrossTalk`
