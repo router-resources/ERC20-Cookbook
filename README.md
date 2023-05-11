@@ -42,6 +42,8 @@ The "ERC20" part of the name refers to the technical standard that is used to cr
 
 ## `How to make a simple ERC20 Token ?`
 
+![ERC20](https://moralis.io/wp-content/uploads/2021/08/21_08_How-to-Create-Your-Own-ERC-20-Token-in-10-Minutes.jpg)
+
 ERC20 is a standard for creating fungible tokens on the Ethereum blockchain. The ERC20 standard is like a set of rules that all tokens on the Ethereum blockchain must follow. Think of it like a recipe for making a soup - you need certain ingredients and instructions to make sure it turns out right.
 
 ERC20 defines a specific set of functions that tokens must have, like the ability to be transferred from one address to another, the ability to check the token balance of an address, and the ability to approve another address to transfer tokens on behalf of the owner. These functions are like different steps in the recipe.
