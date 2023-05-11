@@ -174,7 +174,7 @@ Router's CrossTalk library is a tool that makes it easy for different blockchain
 
 Gateway contracts are contracts which are pre-deployed on supported blockchains for cross-chain communication.The source chain's gateway contract communicates with the destination chain's gateway contract, enabling communication between application contracts deployed on different chains
 
-[Gateway Contract Addresses](https://devnet-alpha.lcd.routerprotocol.com/router-protocol/router-chain/multichain/chain_config)
+[Gateway Contract Addresses](https://lcd.testnet.routerchain.dev//router-protocol/router-chain/multichain/chain_config)
 
 **CrossTalk Workflow**
 
