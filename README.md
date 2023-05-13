@@ -178,7 +178,8 @@ Gateway contracts are contracts which are pre-deployed on supported blockchains 
 
 **CrossTalk Workflow**
 
-<img width="503" alt="image" src="https://user-images.githubusercontent.com/124175970/224872866-cb82abb4-d072-4c7d-bc46-672a18afbb54.png">
+![new-high-level-workflow-62293f72aac999e958af622280b3e15c](https://github.com/router-resources/ERC20-Cookbook/assets/124175970/de63b2db-e582-43fc-8b5a-cf27099b1ce5)
+
 
 When a user wants to execute a cross-chain request, they call the "iSend" function on the Router's Gateway contract. They pass the payload of data to be transferred from the source chain to the destination chain along with the necessary parameters. The "iSend" function sends the data to the destination chain where the user's contract with the "iRecieve" function is waiting to receive it.Once the data is received, the "iRecieve" function processes it on the destination chain. After processing the data, the destination chain sends an acknowledgment back to the source chain where "iAck" function in the user's contract is used to handle it.
 
@@ -232,8 +233,6 @@ This project is built with [Router CrossTalk](https://dev.routerprotocol.com/cro
 Router Protocol is a solution introduced to address the issues hindering the usability of cross-chain liquidity migration in the DeFi ecosystem. It acts as a bridge connecting various layer 1 and layer 2 blockchains, allowing for the flow of contract-level data across them. The Router Protocol can either transfer tokens between chains or initiate operations on one chain and execute them on another.
 
 Please check the [official documentation of Router Protocol](https://www.routerprotocol.com/) 
-
-![1234](https://user-images.githubusercontent.com/124175970/222918389-d6d0a046-bf4c-4737-8577-35794efba8f2.gif)
 
 
 ## `Initiating the Contract`
